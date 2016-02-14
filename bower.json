@@ -1,0 +1,24 @@
+{
+  "name": "SPD4517 Individual Assignment (Web 2.0)",
+  "authors": [
+    "Ken Chan Kwan Wing (14011142S) <14011142S@students.speed-polyu.edu.hk>"
+  ],
+  "description": "An assignment developing a Ghost Leg game using Web 2.0 technologies",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "SPEED",
+    "Ghost leg",
+    "Web",
+    "Assignment"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "nbproject"
+  ]
+}
