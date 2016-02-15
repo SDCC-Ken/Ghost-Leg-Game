@@ -1,31 +1,40 @@
 <?php
 
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 include_once '../Class/JSONDatabase.php';
 $id = isset($_GET["ID"]) ? $_GET["ID"] : "" or exit("No ID");
-$name = $_POST['name'] or exit("No Name");
+$name = isset($_POST["name"]) ? $_POST["name"] : "" or exit("No Name");
 $db = new JSONDatabase();
 $game = $db->readJSON($id) or exit("No Such game");
 $ok = FALSE;
-$haveseat = FALSE;
-foreach($game->player AS $i => $player){
-    if($player->name==$name){
+$seat = NULL;
+foreach ($game->player AS $i => $player) {
+    if ($player->name == $name) {
         $ok = TRUE;
+        $seat = $player->seat;
         break;
     }
-    if($player->name==NULL){
+    if ($player->name == NULL) {
         $game->player[$i] = array(
             "name" => $name,
             "seat" => NULL,
         );
-        $ok = TRUE;
+        $ok = $db->updateJSON($id, $game)?TRUE:FALSE;
         break;
     }
 }
-if($ok && $db->updateJSON($id, $game)){
-    echo "S";
+if ($ok) {
+    echo json_encode(array(
+        "success"=>$ok,
+        "seat"=>$seat,
+    ));
+}else{
+    echo json_encode(array(
+        "success"=>$ok,
+        "message"=>"You can't join the game",
+    ));
 }

@@ -34,13 +34,6 @@ $game = $db->readJSON($_GET["ID"]);
             }
         </style>
 
-        <!-- jQuery Language -->
-        <script src="bower_components/jquery-lang-js/js/jquery-lang.js" type="text/javascript"></script>
-
-        <!-- sweetalert-->
-        <link href="bower_components/sweetalert/dist/sweetalert.css" rel="stylesheet" type="text/css"/>
-        <script src="bower_components/sweetalert/dist/sweetalert.min.js" type="text/javascript"></script>
-
         <link rel="stylesheet" href="css/main.css">
         <script>
             var canvas = {
