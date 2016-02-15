@@ -12,7 +12,7 @@
  * @author user
  */
 include_once 'JSONDatabase.php';
-class GameCreator {
+class Game {
 
     public function create($data) {
         $db = new JSONDatabase();

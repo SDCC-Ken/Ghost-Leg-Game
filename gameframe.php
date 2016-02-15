@@ -1,5 +1,5 @@
 <?php
-include_once 'JSONDatabase.php';
+include_once 'Class/JSONDatabase.php';
 $db = new JSONDatabase();
 if (isset($_GET["ID"]) && $db->readJSON($_GET["ID"]) == NULL) {
     header('HTTP/1.1 404 Not found');

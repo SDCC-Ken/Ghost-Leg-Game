@@ -18,8 +18,8 @@ class JSONDatabase {
 
 
     public function createJSON($filename, $object) {
-        if (!file_exists(realpath(dirname(__FILE__) . "/json/" . $filename . ".json"))) {
-            $fp = fopen(dirname(__FILE__) . "/json/" . $filename . ".json", 'w');
+        if (!file_exists(realpath(dirname(__DIR__) . "/json/" . $filename . ".json"))) {
+            $fp = fopen(dirname(__DIR__) . "/json/" . $filename . ".json", 'w');
             fwrite($fp, json_encode($object));
             fclose($fp);
             return TRUE;
@@ -29,9 +29,9 @@ class JSONDatabase {
     }
 
     public function readJSON($filename) {
-        if (file_exists(realpath(dirname(__FILE__) . "/json/" . $filename . ".json"))) {
-            $myfile = fopen(dirname(__FILE__) . "/json/" . $filename . ".json", "r");
-            $json = fread($myfile, filesize(dirname(__FILE__) . "/json/" . $filename . ".json"));
+        if (file_exists(realpath(dirname(__DIR__) . "/json/" . $filename . ".json"))) {
+            $myfile = fopen(dirname(__DIR__) . "/json/" . $filename . ".json", "r");
+            $json = fread($myfile, filesize(dirname(__DIR__) . "/json/" . $filename . ".json"));
             fclose($myfile);
             return json_decode($json);
         } else {
@@ -40,7 +40,7 @@ class JSONDatabase {
     }
 
     public function updateJSON($filename, $newobject) {
-        if (file_exists(realpath(dirname(__FILE__) . "/json/" . $filename . ".json"))) {
+        if (file_exists(realpath(dirname(__DIR__) . "/json/" . $filename . ".json"))) {
             return ($this->deleteJSON($filename)) ? $this->createJSON($filename, $newobject) : FALSE;
         } else {
             return FALSE;
@@ -48,7 +48,7 @@ class JSONDatabase {
     }
 
     public function deleteJSON($filename) {
-        return (file_exists(realpath(dirname(__FILE__) . "/json/" . $filename . ".json"))) ? unlink(dirname(__FILE__) . "/json/" . $filename . ".json") : FALSE;
+        return (file_exists(realpath(dirname(__DIR__) . "/json/" . $filename . ".json"))) ? unlink(dirname(__DIR__) . "/json/" . $filename . ".json") : FALSE;
     }
 
 }

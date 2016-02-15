@@ -1,11 +1,7 @@
 <?php
-include_once 'JSONDatabase.php';
+include_once 'Class/JSONDatabase.php';
 $db = new JSONDatabase();
-if (isset($_GET["ID"]) && $db->readJSON($_GET["ID"]) == NULL) {
-    header('HTTP/1.1 404 Not found');
-    exit();
-}
-$game = $db->readJSON($_GET["ID"]);
+$game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such game");
 ?>
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
@@ -43,9 +39,11 @@ $game = $db->readJSON($_GET["ID"]);
 
         <link rel="stylesheet" href="css/main.css">
         <script>
+            var findseat = function () {
+                alert("findseat");
+            }
             $(document).ready(function () {
                 var game = JSON.parse('<?php echo json_encode($game); ?>');
-                console.log(game);
                 swal(
                         {
                             title: "What is your name?",
@@ -55,15 +53,38 @@ $game = $db->readJSON($_GET["ID"]);
                             animation: "slide-from-top",
                             inputPlaceholder: "What is your name?"
                         },
-                function (inputValue) {
-                    if (inputValue === false)
-                        return false;
-                    if (inputValue === "") {
-                        swal.showInputError("Please write down your name!");
-                        return false;
-                    }
-                    
-                }
+                        function (inputValue) {
+                            if (inputValue === false)
+                                return false;
+                            if (inputValue === "") {
+                                swal.showInputError("Please write down your name!");
+                                return false;
+                            }
+                            $.ajax(
+                                    {
+                                        method: "POST",
+                                        url: "Ajax/addname.php?ID=<?php echo isset($_GET["ID"]) ? $_GET["ID"] : ""; ?>",
+                                        data: {
+                                            name: inputValue,
+                                        },
+                                        datatype: "json",
+                                        success: function (result) {
+                                            if (result === "S") {
+                                                swal({
+                                                    title: "Nice!",
+                                                    text: "Hello," + inputValue,
+                                                    type: "success",
+                                                }, findseat);
+                                            } else {
+                                                swal.showInputError("Server Error! (Error:" + result+")");
+                                            }
+                                        },
+                                        fail: function (error) {
+                                            swal.showInputError("Server Error (Error:" + error+")");
+                                        },
+                                    }
+                            );
+                        }
                 );
             });
         </script>
