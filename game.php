@@ -44,98 +44,174 @@ $game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such ga
         <script>
             var game = JSON.parse('<?php echo json_encode($game); ?>');
             var playerName = null;
-            var setseat = function (seat) {
-                console.log(seat);
-                if (playerName !== null) {
-                    $('#ChooseSeatDialogFace').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
-                    $.ajax(
-                            {
-                                method: "POST",
-                                url: "Ajax/setseat.php?ID=<?php echo isset($_GET["ID"]) ? $_GET["ID"] : ""; ?>",
-                                data: {
-                                    seat: seat,
-                                    name: playerName,
-                                },
-                                datatype: "json",
-                                success: function (result) {
-                                    $('#ChooseSeatDialogFace').waitMe("hide");
-                                    if (result == "S") {
-                                        $('#ChooseSeatDialog').modal('hide');
-                                    } else {
-                                        $("#seaterrortext").html("Server Error! (Error:" + result + ")");
-                                    }
-                                },
-                                fail: function (error) {
-                                    $('#ChooseSeatDialogFace').waitMe("hide");
-                                    $("#seaterrortext").html("Server Error (Error:" + error + ")");
-                                },
-                            }
-                    );
-                }
-            }
-            var findseat = function () {
-                $('#EnterNameDialog').modal('hide');
-                $('#ChooseSeatDialog').modal({
-                    backdrop: 'static',
-                    keyboard: false
-                })
-                $('#ChooseSeatDialog').modal('show');
-                var context = $("#readgamecanvas")[0].getContext("2d");
-                for (var i = 0; i < game.player.length; i++) {
-                    var x = 50 + i * 100;
+            var finalize = function () {
+
+            var context = $("#gamecanvas")[0].getContext("2d");
+                    for (var i = 0; i < game.player.length; i++) {
+            var x = 50 + i * 100;
                     context.beginPath();
                     context.moveTo(x, 0);
                     context.lineTo(x, 500);
                     context.stroke();
                     context.beginPath();
-                    $("#seat" + i).html('<button onClick="setseat(' + i + ')" type="button" class="btn btn-primary expand-right ladda" data-style="expand-right"><span class="ladda-label">Seat ' + i + '</span></button>');
-                }
-                for (var i = 0; i < game.player.length; i++) {
-                    if (game.player[i].seat !== null) {
-                        $("#seat" + game.player[i].seat).html(game.player[i].name);
-                    }
-                }
+                    $("#seat" + i).html(game.player[i].name);
             }
+            var canvas = {
+<?php foreach ($game->player AS $i => $player): ?>
+                "canvas<?php echo $i ?>": new Array(),
+<?php endforeach; ?>
+            };
+                    function checkok(a, b) {
+                    return (Math.abs(a - b) > 10) ? true : false;
+                    }
+            $(document).ready(function () {
+            $('#gamecanvas').on({
+            mousedown: function (e) {
+            var ok = false;
+            var x= e.pageX - this.offsetLeft;
+                    var y = e.pageY - this.offsetTop;
+                    if (canvas[$(this).attr('id')].length > 0) {
+            if ($(this).prev().length > 0 && canvas[$(this).prev().attr('id')] !== null) {
+            for (var i = 0; i < canvas[$(this).prev("canvas").attr('id')].length; i++) {
+            ok = checkok(canvas[$(this).prev("canvas").attr('id')][i], y);
+                    if (!ok) {
+            break;
+            }
+            }
+            }
+            for (var i = 0; i < canvas[$(this).attr('id')].length; i++) {
+            ok = checkok(canvas[$(this).attr('id')][i], y);
+                    if (!ok) {
+            break;
+            }
+            }
+            if ($(this).next().length > 0 && canvas[$(this).next("canvas").attr('id')] !== null) {
+            for (var i = 0; i < canvas[$(this).next("canvas").attr('id')].length; i++) {
+            ok = checkok(canvas[$(this).next("canvas").attr('id')][i], y);
+                    if (!ok) {
+            break;
+            }
+            }
+            }
+            } else {
+            ok = true;
+            }
+            if (ok) {
+            canvas[$(this).attr('id')].push(y);
+                    var context = $(this)[0].getContext("2d");
+                    context.beginPath();
+                    context.moveTo(0, y);
+                    context.lineTo(300, y);
+                    context.stroke();
+                    context.beginPath();
+            }
+
+            }
+            });
+            });
+            };
+                    var setseat = function (seat) {
+                    console.log(seat);
+                            if (playerName !== null) {
+                    $('#ChooseSeatDialogFace').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
+                            $.ajax(
+                            {
+                            method: "POST",
+                                    url: "Ajax/setseat.php?ID=<?php echo isset($_GET["ID"]) ? $_GET["ID"] : ""; ?>",
+                                    data: {
+                                    seat: seat,
+                                            name: playerName,
+                                    },
+                                    datatype: "json",
+                                    success: function (result) {
+                                    $('#ChooseSeatDialogFace').waitMe("hide");
+                                            if (result == "S") {
+                                    $('#ChooseSeatDialog').modal('hide');
+                                            finalize();
+                                    } else {
+                                    $("#seaterrortext").html("Server Error! (Error:" + result + ")");
+                                    }
+                                    },
+                                    fail: function (error) {
+                                    $('#ChooseSeatDialogFace').waitMe("hide");
+                                            $("#seaterrortext").html("Server Error (Error:" + error + ")");
+                                    },
+                            }
+                            );
+                    }
+                    };
+                    var findseat = function () {
+                    $('#EnterNameDialog').modal('hide');
+                            $('#ChooseSeatDialog').modal({
+                    backdrop: 'static',
+                            keyboard: false
+                    });
+                            $('#ChooseSeatDialog').modal('show');
+                            var context = $("#readgamecanvas")[0].getContext("2d");
+                            for (var i = 0; i < game.player.length; i++) {
+                    var x = 50 + i * 100;
+                            context.beginPath();
+                            context.moveTo(x, 0);
+                            context.lineTo(x, 500);
+                            context.stroke();
+                            context.beginPath();
+                            $("#seat" + i).html('<button onClick="setseat(' + i + ')" type="button" class="btn btn-primary expand-right ladda" data-style="expand-right"><span class="ladda-label">Seat ' + i + '</span></button>');
+                    }
+                    var context = $("#readgamecanvas")[0].getContext("2d");
+                            for (var i = 0; i < game.player.length; i++) {
+                    var x = 50 + i * 100;
+                            context.beginPath();
+                            context.moveTo(x, 0);
+                            context.lineTo(x, 500);
+                            context.stroke();
+                            for (var i = 0; i < game.player.length; i++) {
+                    if (game.player[i].seat !== null) {
+                    $("#seat" + game.player[i].seat).html(game.player[i].name);
+                    }
+                    }
+                    }
+                    }
             $(document).ready(function () {
 //                Ladda.bind('.ladda button');
-                $('#EnterNameDialog').modal({
-                    backdrop: 'static',
+            $('#EnterNameDialog').modal({
+            backdrop: 'static',
                     keyboard: false
-                })
-                $('#EnterNameDialog').modal('show');
-                $('#enterNameButton').click(function () {
-                    $('#EnterNameDialogFace').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
+            })
+                    $('#EnterNameDialog').modal('show');
+                    $('#enterNameButton').click(function () {
+            $('#EnterNameDialogFace').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
                     console.log($("#name").val());
                     $.ajax(
-                            {
-                                method: "POST",
-                                url: "Ajax/addname.php?ID=<?php echo isset($_GET["ID"]) ? $_GET["ID"] : ""; ?>",
-                                data: {
-                                    name: $("#name").val(),
-                                },
-                                datatype: "json",
-                                success: function (jsonresult) {
-                                    $('#EnterNameDialogFace').waitMe("hide");
+                    {
+                    method: "POST",
+                            url: "Ajax/addname.php?ID=<?php echo isset($_GET["ID"]) ? $_GET["ID"] : ""; ?>",
+                            data: {
+                            name: $("#name").val(),
+                            },
+                            datatype: "json",
+                            success: function (jsonresult) {
+                            $('#EnterNameDialogFace').waitMe("hide");
                                     var result = JSON.parse(jsonresult);
                                     if (result.success) {
-                                        playerName = $("#name").val();
-                                        if (result.seat !== null) {
-                                            $('#EnterNameDialog').modal('hide');
-                                        } else {
-                                            findseat();
-                                        }
-                                    } else {
-                                        $("#errortext").html("Server Error! (Error:" + result + ")");
-                                    }
-
-                                },
-                                fail: function (error) {
-                                    $('#EnterNameDialogFace').waitMe("hide");
-                                    $("#errortext").html("Server Error (Error:" + error + ")");
-                                },
+                            playerName = $("#name").val();
+                                    if (result.seat !== null) {
+                            $('#EnterNameDialog').modal('hide');
+                                    finalize();
+                            } else {
+                            findseat();
                             }
+                            } else {
+                            $("#errortext").html("Server Error! (Error:" + result + ")");
+                            }
+
+                            },
+                            fail: function (error) {
+                            $('#EnterNameDialogFace').waitMe("hide");
+                                    $("#errortext").html("Server Error (Error:" + error + ")");
+                            },
+                    }
                     );
-                });
+            });
             });
         </script>
     </head>
@@ -158,7 +234,31 @@ $game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such ga
         </nav>
 
         <main class="container">
-            <iframe src="gameframe.php?ID=<?php echo $_GET["ID"]; ?>" style="width:100%;height: 800px;border:0px;"></iframe>
+            <div class="table-responsive" style="width:<?php echo (sizeof($game->player)) * 100; ?>px;">
+                <table class="text-center">
+                    <thead>
+                        <tr>
+                            <?php foreach ($game->player AS $i => $player): ?>
+                                <td id="gameseat<?php echo $i ?>" style="width: 100px;padding: 0"></td>
+                            <?php endforeach; ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="<?php echo sizeof($game->player); ?>" style="width:<?php echo (sizeof($game->player)) * 100; ?>px;margin:0px 50px;">
+                                <canvas id="gamecanvas" width='<?php echo (sizeof($game->player)) * 100; ?>' height='500'></canvas>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <?php foreach ($game->goal AS $goal): ?>
+                                <td style="width: 100px;padding: 0"><?php echo $goal; ?></td>
+                            <?php endforeach; ?>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         </main>
 
         <footer class="navbar-fixed-bottom">
