@@ -41,7 +41,7 @@ class JSONDatabase {
 
     public function updateJSON($filename, $newobject) {
         if (file_exists(realpath(dirname(__DIR__) . "/json/" . $filename . ".json"))) {
-            return ($this->deleteJSON($filename)) ? $this->createJSON($filename, $newobject) : FALSE;
+            return file_put_contents(realpath(dirname(__DIR__) . "/json/" . $filename . ".json"), json_encode($newobject))?TRUE:FALSE;
         } else {
             return FALSE;
         }

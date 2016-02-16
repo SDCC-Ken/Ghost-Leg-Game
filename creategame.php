@@ -1,6 +1,6 @@
 <?php
-include_once 'Class/GameCreator.php';
-include_once 'JSONDatabase.php';
+include_once 'Class/Game.php';
+include_once 'Class/JSONDatabase.php';
 $success = false;
 $checker = false;
 if (!file_exists(realpath(dirname(__FILE__) . "/json"))) {
@@ -30,7 +30,7 @@ if (isset($_POST["submit"])) {
     }
     $db = new JSONDatabase();
     if ($checker) {
-        $return = (new GameCreator())->create($_POST);
+        $return = (new Game())->create($_POST);
         if ($return["success"]) {
             $success = true;
             header("Location: " . $return["url"]);
@@ -90,7 +90,7 @@ if (isset($_POST["submit"])) {
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#">SPD4517 Indivdual Assignment 1</a>
+                    <a class="navbar-brand" href="index.html">SPD4517 Indivdual Assignment 1</a>
                 </div>
             </div>
         </nav>

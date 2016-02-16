@@ -1,11 +1,7 @@
 <?php
-include_once 'JSONDatabase.php';
+include_once 'Class/JSONDatabase.php';
 $db = new JSONDatabase();
-if (isset($_GET["ID"]) && $db->readJSON($_GET["ID"]) == NULL) {
-    header('HTTP/1.1 404 Not found');
-    exit();
-}
-$game = $db->readJSON($_GET["ID"]);
+$game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such game");
 ?>
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
@@ -103,14 +99,9 @@ $game = $db->readJSON($_GET["ID"]);
             </p>
             <div>
                 <a href="game.php?ID=<?php echo $_GET["ID"]; ?>">Play</a>
-                <div class="box">
-                    <iframe src="gameframe.php?ID=<?php echo $_GET["ID"]; ?>"></iframe>
-                </div>
             </div>
             <p>Share:</p>
-            <button type="button" class="btn btn-default btn-lg">
-                <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Email
-            </button>
+            <p>Link: <a href="game.php?ID=<?php echo $_GET["ID"]; ?>">http://kwanwing.tk/SPEED?game.php?ID=<?php echo $_GET["ID"]; ?></a></p>
 
         </main>
         <footer class="navbar-fixed-bottom">

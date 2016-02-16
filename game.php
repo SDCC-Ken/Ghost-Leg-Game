@@ -42,176 +42,116 @@ $game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such ga
         <script src="bower_components/waitMe/waitMe.js" type="text/javascript"></script>
         <link rel="stylesheet" href="css/main.css">
         <script>
+            var ajax = false;
             var game = JSON.parse('<?php echo json_encode($game); ?>');
             var playerName = null;
+            function checkok(a, b) {
+                return (Math.abs(a - b) > 10) ? true : false;
+            }
             var finalize = function () {
-
-            var context = $("#gamecanvas")[0].getContext("2d");
-                    for (var i = 0; i < game.player.length; i++) {
-            var x = 50 + i * 100;
+                $("#gameframe").attr("src", "gameframe.php?ID=<?php echo isset($_GET["ID"]) ? $_GET["ID"] : ""; ?>");
+            };
+            var setseat = function (seat) {
+                console.log(seat);
+                if (playerName !== null) {
+                    $('#ChooseSeatDialogFace').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
+                    $.ajax(
+                            {
+                                method: "POST",
+                                url: "Ajax/setseat.php?ID=<?php echo isset($_GET["ID"]) ? $_GET["ID"] : ""; ?>",
+                                data: {
+                                    seat: seat,
+                                    name: playerName,
+                                },
+                                datatype: "json",
+                                success: function (result) {
+                                    $('#ChooseSeatDialogFace').waitMe("hide");
+                                    if (result == "S") {
+                                        $('#ChooseSeatDialog').modal('hide');
+                                        finalize();
+                                    } else {
+                                        $("#seaterrortext").html("Server Error! (Error:" + result + ")");
+                                    }
+                                },
+                                fail: function (error) {
+                                    $('#ChooseSeatDialogFace').waitMe("hide");
+                                    $("#seaterrortext").html("Server Error (Error:" + error + ")");
+                                },
+                            }
+                    );
+                }
+            };
+            var findseat = function () {
+                $('#EnterNameDialog').modal('hide');
+                $('#ChooseSeatDialog').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                $('#ChooseSeatDialog').modal('show');
+                var context = $("#readgamecanvas")[0].getContext("2d");
+                for (var i = 0; i < game.player.length; i++) {
+                    var x = 50 + i * 100;
                     context.beginPath();
                     context.moveTo(x, 0);
                     context.lineTo(x, 500);
                     context.stroke();
                     context.beginPath();
-                    $("#seat" + i).html(game.player[i].name);
-            }
-            var canvas = {
-<?php foreach ($game->player AS $i => $player): ?>
-                "canvas<?php echo $i ?>": new Array(),
-<?php endforeach; ?>
-            };
-                    function checkok(a, b) {
-                    return (Math.abs(a - b) > 10) ? true : false;
-                    }
-            $(document).ready(function () {
-            $('#gamecanvas').on({
-            mousedown: function (e) {
-            var ok = false;
-            var x= e.pageX - this.offsetLeft;
-                    var y = e.pageY - this.offsetTop;
-                    if (canvas[$(this).attr('id')].length > 0) {
-            if ($(this).prev().length > 0 && canvas[$(this).prev().attr('id')] !== null) {
-            for (var i = 0; i < canvas[$(this).prev("canvas").attr('id')].length; i++) {
-            ok = checkok(canvas[$(this).prev("canvas").attr('id')][i], y);
-                    if (!ok) {
-            break;
-            }
-            }
-            }
-            for (var i = 0; i < canvas[$(this).attr('id')].length; i++) {
-            ok = checkok(canvas[$(this).attr('id')][i], y);
-                    if (!ok) {
-            break;
-            }
-            }
-            if ($(this).next().length > 0 && canvas[$(this).next("canvas").attr('id')] !== null) {
-            for (var i = 0; i < canvas[$(this).next("canvas").attr('id')].length; i++) {
-            ok = checkok(canvas[$(this).next("canvas").attr('id')][i], y);
-                    if (!ok) {
-            break;
-            }
-            }
-            }
-            } else {
-            ok = true;
-            }
-            if (ok) {
-            canvas[$(this).attr('id')].push(y);
-                    var context = $(this)[0].getContext("2d");
+                    $("#seat" + i).html('<button onClick="setseat(' + i + ')" type="button" class="btn btn-primary expand-right ladda" data-style="expand-right"><span class="ladda-label">Seat ' + i + '</span></button>');
+                }
+                var context = $("#readgamecanvas")[0].getContext("2d");
+                for (var i = 0; i < game.player.length; i++) {
+                    var x = 50 + i * 100;
                     context.beginPath();
-                    context.moveTo(0, y);
-                    context.lineTo(300, y);
+                    context.moveTo(x, 0);
+                    context.lineTo(x, 500);
                     context.stroke();
-                    context.beginPath();
+                    for (var i = 0; i < game.player.length; i++) {
+                        if (game.player[i].seat !== null) {
+                            $("#seat" + game.player[i].seat).html(game.player[i].name);
+                        }
+                    }
+                }
             }
-
-            }
-            });
-            });
-            };
-                    var setseat = function (seat) {
-                    console.log(seat);
-                            if (playerName !== null) {
-                    $('#ChooseSeatDialogFace').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
-                            $.ajax(
-                            {
-                            method: "POST",
-                                    url: "Ajax/setseat.php?ID=<?php echo isset($_GET["ID"]) ? $_GET["ID"] : ""; ?>",
-                                    data: {
-                                    seat: seat,
-                                            name: playerName,
-                                    },
-                                    datatype: "json",
-                                    success: function (result) {
-                                    $('#ChooseSeatDialogFace').waitMe("hide");
-                                            if (result == "S") {
-                                    $('#ChooseSeatDialog').modal('hide');
-                                            finalize();
-                                    } else {
-                                    $("#seaterrortext").html("Server Error! (Error:" + result + ")");
-                                    }
-                                    },
-                                    fail: function (error) {
-                                    $('#ChooseSeatDialogFace').waitMe("hide");
-                                            $("#seaterrortext").html("Server Error (Error:" + error + ")");
-                                    },
-                            }
-                            );
-                    }
-                    };
-                    var findseat = function () {
-                    $('#EnterNameDialog').modal('hide');
-                            $('#ChooseSeatDialog').modal({
-                    backdrop: 'static',
-                            keyboard: false
-                    });
-                            $('#ChooseSeatDialog').modal('show');
-                            var context = $("#readgamecanvas")[0].getContext("2d");
-                            for (var i = 0; i < game.player.length; i++) {
-                    var x = 50 + i * 100;
-                            context.beginPath();
-                            context.moveTo(x, 0);
-                            context.lineTo(x, 500);
-                            context.stroke();
-                            context.beginPath();
-                            $("#seat" + i).html('<button onClick="setseat(' + i + ')" type="button" class="btn btn-primary expand-right ladda" data-style="expand-right"><span class="ladda-label">Seat ' + i + '</span></button>');
-                    }
-                    var context = $("#readgamecanvas")[0].getContext("2d");
-                            for (var i = 0; i < game.player.length; i++) {
-                    var x = 50 + i * 100;
-                            context.beginPath();
-                            context.moveTo(x, 0);
-                            context.lineTo(x, 500);
-                            context.stroke();
-                            for (var i = 0; i < game.player.length; i++) {
-                    if (game.player[i].seat !== null) {
-                    $("#seat" + game.player[i].seat).html(game.player[i].name);
-                    }
-                    }
-                    }
-                    }
             $(document).ready(function () {
-//                Ladda.bind('.ladda button');
-            $('#EnterNameDialog').modal({
-            backdrop: 'static',
+                $('#EnterNameDialog').modal({
+                    backdrop: 'static',
                     keyboard: false
-            })
-                    $('#EnterNameDialog').modal('show');
-                    $('#enterNameButton').click(function () {
-            $('#EnterNameDialogFace').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
+                })
+                $('#EnterNameDialog').modal('show');
+                $('#enterNameButton').click(function () {
+                    $('#EnterNameDialogFace').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
                     console.log($("#name").val());
                     $.ajax(
-                    {
-                    method: "POST",
-                            url: "Ajax/addname.php?ID=<?php echo isset($_GET["ID"]) ? $_GET["ID"] : ""; ?>",
-                            data: {
-                            name: $("#name").val(),
-                            },
-                            datatype: "json",
-                            success: function (jsonresult) {
-                            $('#EnterNameDialogFace').waitMe("hide");
+                            {
+                                method: "POST",
+                                url: "Ajax/addname.php?ID=<?php echo isset($_GET["ID"]) ? $_GET["ID"] : ""; ?>",
+                                data: {
+                                    name: $("#name").val(),
+                                },
+                                datatype: "json",
+                                success: function (jsonresult) {
+                                    $('#EnterNameDialogFace').waitMe("hide");
                                     var result = JSON.parse(jsonresult);
                                     if (result.success) {
-                            playerName = $("#name").val();
-                                    if (result.seat !== null) {
-                            $('#EnterNameDialog').modal('hide');
-                                    finalize();
-                            } else {
-                            findseat();
-                            }
-                            } else {
-                            $("#errortext").html("Server Error! (Error:" + result + ")");
-                            }
+                                        playerName = $("#name").val();
+                                        if (result.seat !== null) {
+                                            $('#EnterNameDialog').modal('hide');
+                                            finalize();
+                                        } else {
+                                            findseat();
+                                        }
+                                    } else {
+                                        $("#errortext").html("Server Error! (Error:" + result + ")");
+                                    }
 
-                            },
-                            fail: function (error) {
-                            $('#EnterNameDialogFace').waitMe("hide");
+                                },
+                                fail: function (error) {
+                                    $('#EnterNameDialogFace').waitMe("hide");
                                     $("#errortext").html("Server Error (Error:" + error + ")");
-                            },
-                    }
+                                },
+                            }
                     );
-            });
+                });
             });
         </script>
     </head>
@@ -225,7 +165,7 @@ $game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such ga
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">SPD4517 Indivdual Assignment 1</a>
+                    <a class="navbar-brand" href="index.html">SPD4517 Indivdual Assignment 1</a>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
 
@@ -234,31 +174,7 @@ $game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such ga
         </nav>
 
         <main class="container">
-            <div class="table-responsive" style="width:<?php echo (sizeof($game->player)) * 100; ?>px;">
-                <table class="text-center">
-                    <thead>
-                        <tr>
-                            <?php foreach ($game->player AS $i => $player): ?>
-                                <td id="gameseat<?php echo $i ?>" style="width: 100px;padding: 0"></td>
-                            <?php endforeach; ?>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="<?php echo sizeof($game->player); ?>" style="width:<?php echo (sizeof($game->player)) * 100; ?>px;margin:0px 50px;">
-                                <canvas id="gamecanvas" width='<?php echo (sizeof($game->player)) * 100; ?>' height='500'></canvas>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <?php foreach ($game->goal AS $goal): ?>
-                                <td style="width: 100px;padding: 0"><?php echo $goal; ?></td>
-                            <?php endforeach; ?>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
+            <iframe id="gameframe" src="" style="width:100%;height: 700px;"></iframe>
         </main>
 
         <footer class="navbar-fixed-bottom">
@@ -274,11 +190,9 @@ $game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such ga
                     </div>
                     <div class="modal-body">
                         <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
-                        <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
                         <h1 class="text-center">What is your name?</h1>
                         <p class="text-center"><label for="name"><input type="text" id="name" /></label></p>
                         <p id="errortext"></p>
-                        <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
                         <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
 
                     </div>
