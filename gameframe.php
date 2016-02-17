@@ -1,11 +1,8 @@
 <?php
 include_once 'Class/JSONDatabase.php';
+$id = isset($_GET["ID"]) ? $_GET["ID"] : "" or exit("No ID");
 $db = new JSONDatabase();
-if (isset($_GET["ID"]) && $db->readJSON($_GET["ID"]) == NULL) {
-    header('HTTP/1.1 404 Not found');
-    exit();
-}
-$game = $db->readJSON($_GET["ID"]);
+$game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such game");
 $seats = array();
 foreach ($game->player AS $player) {
     if ($player->name != NULL && $player->seat != NULL) {
@@ -40,10 +37,9 @@ foreach ($game->player AS $player) {
 
         <script>
             var canvas = {
-<?php for ($i = 0; $i < sizeof($game->player) - 1; $i++): ?>
-                    "canvas<?php echo $i ?>": [
+<?php foreach ($game->player AS $i => $player): ?>
                     ],
-<?php endfor; ?>
+<?php endforeach; ?>
             };
             var addline = function (context, area, y) {
                 $('#gameborad').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
@@ -76,57 +72,7 @@ foreach ($game->player AS $player) {
                         }
                 );
             }
-            function checkok(a, b) {
-                return (Math.abs(a - b) > 10) ? true : false;
-            }
             var game = JSON.parse('<?php echo json_encode($game); ?>');
-            $(document).ready(function () {
-                for (var i = 0; i < game.line.length; i++) {
-                    var context = $("#"+game.line[i].area)[0].getContext("2d");
-                    context.beginPath();
-                    context.moveTo(0, game.line[i].y);
-                    context.lineTo(300, game.line[i].y);
-                    context.stroke();
-                    context.beginPath();
-                }
-                $('canvas').on({
-                    mousedown: function (e) {
-                        var ok = false;
-                        var y = e.pageY - this.offsetTop;
-                        if (canvas[$(this).attr('id')].length > 0) {
-                            if ($(this).prev().length > 0 && canvas[$(this).prev().attr('id')] !== null) {
-                                for (var i = 0; i < canvas[$(this).prev("canvas").attr('id')].length; i++) {
-                                    ok = checkok(canvas[$(this).prev("canvas").attr('id')][i], y);
-                                    if (!ok) {
-                                        break;
-                                    }
-                                }
-                            }
-                            for (var i = 0; i < canvas[$(this).attr('id')].length; i++) {
-                                ok = checkok(canvas[$(this).attr('id')][i], y);
-                                if (!ok) {
-                                    break;
-                                }
-                            }
-                            if ($(this).next().length > 0 && canvas[$(this).next("canvas").attr('id')] !== null) {
-                                for (var i = 0; i < canvas[$(this).next("canvas").attr('id')].length; i++) {
-                                    ok = checkok(canvas[$(this).next("canvas").attr('id')][i], y);
-                                    if (!ok) {
-                                        break;
-                                    }
-                                }
-                            }
-                        } else {
-                            ok = true;
-                        }
-                        if (ok) {
-                            var context = $(this)[0].getContext("2d");
-                            addline(context, $(this).attr('id'), y);
-                        }
-                    }
-                });
-            });
-
         </script>
     </head>
     <body>

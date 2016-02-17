@@ -1,5 +1,6 @@
 <?php
 include_once 'Class/JSONDatabase.php';
+$id = isset($_GET["ID"]) ? $_GET["ID"] : "" or exit("No ID");
 $db = new JSONDatabase();
 $game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such game");
 ?>
@@ -40,14 +41,12 @@ $game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such ga
         <!--waitMe-->
         <link href="bower_components/waitMe/waitMe.css" rel="stylesheet" type="text/css"/>
         <script src="bower_components/waitMe/waitMe.js" type="text/javascript"></script>
+        
+        <script src="js/game.js" type="text/javascript"></script>
         <link rel="stylesheet" href="css/main.css">
         <script>
-            var ajax = false;
             var game = JSON.parse('<?php echo json_encode($game); ?>');
             var playerName = null;
-            function checkok(a, b) {
-                return (Math.abs(a - b) > 10) ? true : false;
-            }
             var finalize = function () {
                 $("#gameframe").attr("src", "gameframe.php?ID=<?php echo isset($_GET["ID"]) ? $_GET["ID"] : ""; ?>");
             };
@@ -81,37 +80,6 @@ $game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such ga
                     );
                 }
             };
-            var findseat = function () {
-                $('#EnterNameDialog').modal('hide');
-                $('#ChooseSeatDialog').modal({
-                    backdrop: 'static',
-                    keyboard: false
-                });
-                $('#ChooseSeatDialog').modal('show');
-                var context = $("#readgamecanvas")[0].getContext("2d");
-                for (var i = 0; i < game.player.length; i++) {
-                    var x = 50 + i * 100;
-                    context.beginPath();
-                    context.moveTo(x, 0);
-                    context.lineTo(x, 500);
-                    context.stroke();
-                    context.beginPath();
-                    $("#seat" + i).html('<button onClick="setseat(' + i + ')" type="button" class="btn btn-primary expand-right ladda" data-style="expand-right"><span class="ladda-label">Seat ' + i + '</span></button>');
-                }
-                var context = $("#readgamecanvas")[0].getContext("2d");
-                for (var i = 0; i < game.player.length; i++) {
-                    var x = 50 + i * 100;
-                    context.beginPath();
-                    context.moveTo(x, 0);
-                    context.lineTo(x, 500);
-                    context.stroke();
-                    for (var i = 0; i < game.player.length; i++) {
-                        if (game.player[i].seat !== null) {
-                            $("#seat" + game.player[i].seat).html(game.player[i].name);
-                        }
-                    }
-                }
-            }
             $(document).ready(function () {
                 $('#EnterNameDialog').modal({
                     backdrop: 'static',

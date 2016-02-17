@@ -18,13 +18,12 @@ class Game {
         $db = new JSONDatabase();
         if (($db->readJSON($data["gameid"]) == NULL)) {
             $player = array();
-            $goal = array();
+            $goal = json_decode($data["goals"]);
             for ($i = 0; $i < $data["player"]; $i++) {
                 $player[$i] = array(
                     "name" => ($i == 0) ? $data["name"] : NULL,
                     "seat" => NULL,
                 );
-                $goal[] = $data["goal" . ($i + 1)];
             }
             shuffle($goal);
             $game = array(

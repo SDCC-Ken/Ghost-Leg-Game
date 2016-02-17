@@ -1,45 +1,4 @@
-<?php
-include_once 'Class/Game.php';
-include_once 'Class/JSONDatabase.php';
-$success = false;
-$checker = false;
-if (!file_exists(realpath(dirname(__FILE__) . "/json"))) {
-    mkdir(dirname(__FILE__) . "/json");
-}
-if (isset($_POST["submit"])) {
-    if (isset($_POST["name"]) && $_POST["name"] != "") {
-        $checker = true;
-    } else {
-        $errortext = "Please enter your name";
-    }
-    if (isset($_POST["gameid"]) && $_POST["gameid"] != "") {
-        $checker = true;
-    } else {
-        $errortext = "Please enter Game ID";
-    }
-    if (isset($_POST["player"]) && $_POST["player"] != "") {
-        for ($i = 0; $i < $_POST["player"]; $i++) {
-            if (isset($_POST["goal" . ($i + 1)]) && $_POST["goal" . ($i + 1)] != "") {
-                $checker = true;
-            } else {
-                $errortext = "Please enter the Goals";
-            }
-        }
-    } else {
-        $errortext = "Please enter how many player";
-    }
-    $db = new JSONDatabase();
-    if ($checker) {
-        $return = (new Game())->create($_POST);
-        if ($return["success"]) {
-            $success = true;
-            header("Location: " . $return["url"]);
-        } else {
-            $errortext = $return["message"];
-        }
-    }
-}
-?><!doctype html>
+<!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
@@ -68,23 +27,12 @@ if (isset($_POST["submit"])) {
         <!-- jQuery Language -->
         <script src="bower_components/jquery-lang-js/js/jquery-lang.js" type="text/javascript"></script>
 
-        <!-- sweetalert-->
-        <link href="bower_components/sweetalert/dist/sweetalert.css" rel="stylesheet" type="text/css"/>
-        <script src="bower_components/sweetalert/dist/sweetalert.min.js" type="text/javascript"></script>
+        <link href="bower_components/waitMe/waitMe.css" rel="stylesheet" type="text/css"/>
+        <script src="bower_components/waitMe/waitMe.js" type="text/javascript"></script>
 
         <link rel="stylesheet" href="css/main.css">
         <script src="js/main.js"></script>
-        <script>
-            $(document).ready(function () {
-                $("#player").change(function () {
-                    console.log(Number($(this).val()));
-                    $("#goal").html("");
-                    for (var i = 0; i < Number($(this).val()); i++) {
-                        $("#goal").append('<input type="text" class="form-control" id="goal' + (i + 1) + '" name="goal' + (i + 1) + '" required="required">');
-                    }
-                });
-            })
-        </script>
+        <script src="js/creategame.js" type="text/javascript"></script>
     </head>
     <body>
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -95,24 +43,19 @@ if (isset($_POST["submit"])) {
             </div>
         </nav>
         <main class="container-fluid">
-            <form method="POST">
-                <?php if (isset($errortext)): ?>
-                    <div class="alert alert-danger alert-dismissible" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <strong>Warning!</strong> <?php echo $errortext;?>
-                    </div>
-                <?php endif; ?>
+            <form id="createform">
+                <p id="errortext"></p>
                 <div class="form-group">
                     <label for="name">Your Name</label>
-                    <input type="text" class="form-control" id="name" name="name" required="required">
+                    <input type="text" class="form-control" id="name" name="name" required="required" />
                 </div>
                 <div class="form-group">
                     <label for="gameid">Game ID</label>
-                    <input type="text" class="form-control" id="gameid" name="gameid" max="5" required="required">
+                    <input type="text" class="form-control" id="gameid" name="gameid" maxlength="5" required="required" />
                 </div>
                 <div class="form-group">
                     <label for="player">No of player</label>
-                    <input type="number" class="form-control" id="player" name="player" required="required">
+                    <input type="number" class="form-control" id="player" name="player" required="required" />
                 </div>
                 <div class="form-group">
                     <label for="goal">Goals</label>
@@ -129,13 +72,26 @@ if (isset($_POST["submit"])) {
                     </div>
                     <span class="help-block">When you type the no of player, the number of goal input would display.</span>
                 </div>
-                <button type="submit" class="btn btn-default" name="submit">Create</button>
+                <button id="createButton" type="button" class="btn btn-default" name="submit">Create</button>
             </form>
         </main>
 
         <footer class="navbar-fixed-bottom">
             <p>&copy; Chan Kwan Wing 14011142S</p>
-        </footer>      
+        </footer>  
+        
+        <div id="ShareDialog" class="modal fade" tabindex="-1" role="dialog">
+            <div id="ShareDialogFace" class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Share Game</h4>
+                    </div>
+                    <div class="modal-body">
+                        <iframe id="share" src="" style="width:100%;height: 700px;"></iframe>
+                    </div>
 
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
     </body>
 </html>

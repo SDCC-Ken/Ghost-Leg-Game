@@ -37,76 +37,36 @@ $game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such ga
         <script src="bower_components/sweetalert/dist/sweetalert.min.js" type="text/javascript"></script>
 
         <link rel="stylesheet" href="css/main.css">
-        <style>
-            .box{
-                display: none;
-                width: 100%;
-            }
-
-            a:hover + .box,.box:hover{
-                display: block;
-                position: relative;
-                z-index: 100;
-            }
-        </style>
         <script src="js/main.js"></script>
-        <script>
-            $(document).ready(function () {
-                $("#player").change(function () {
-                    console.log(Number($(this).val()));
-                    $("#goal").html("");
-                    for (var i = 0; i < Number($(this).val()); i++) {
-                        $("#goal").append('<input type="text" class="form-control" id="goal' + (i + 1) + '" name="goal' + (i + 1) + '" required="required">');
-                    }
-                });
-            })
-        </script>
     </head>
     <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#">SPD4517 Indivdual Assignment 1</a>
-                </div>
-            </div>
-        </nav>
-        <main class="container-fluid">
-            <h1>Game (ID:<?php echo $_GET["ID"]; ?>)</h1>
-            <p>Creator: <?php echo $game->creator; ?></p>
-            <p>Player: </p>
-            <?php
-            $noplayer = 0;
-            foreach ($game->player AS $player):
-                if ($player->name == NULL):
-                    $noplayer++;
-                else:
-                    ?>
-                    <p><?php echo $player->name; ?></p>
-                <?php
-                endif;
-            endforeach;
-            ?>
-            <p><?php echo $noplayer ?> more  player can join</p>
-            <p>Goals: 
-                <?php
-                foreach ($game->goal AS $i => $goal) {
-                    echo $goal;
-                    if ($i != sizeof($game->goal) - 1) {
-                        echo ",";
-                    }
-                }
+        <h1>Game (ID:<?php echo $_GET["ID"]; ?>)</h1>
+        <p>Creator: <?php echo $game->creator; ?></p>
+        <p>Player: </p>
+        <?php
+        $noplayer = 0;
+        foreach ($game->player AS $player):
+            if ($player->name == NULL):
+                $noplayer++;
+            else:
                 ?>
-            </p>
-            <div>
-                <a href="game.php?ID=<?php echo $_GET["ID"]; ?>">Play</a>
-            </div>
-            <p>Share:</p>
-            <p>Link: <a href="game.php?ID=<?php echo $_GET["ID"]; ?>">http://skydreamcity.hk/SPEED/game.php?ID=<?php echo $_GET["ID"]; ?></a></p>
-
-        </main>
-        <footer class="navbar-fixed-bottom">
-            <p>&copy; Chan Kwan Wing 14011142S</p>
-        </footer>      
-
+                <p><?php echo $player->name; ?></p>
+            <?php
+            endif;
+        endforeach;
+        ?>
+        <p><?php echo $noplayer ?> more  player can join</p>
+        <p>Goals: 
+            <?php
+            foreach ($game->goal AS $i => $goal) {
+                echo $goal;
+                if ($i != sizeof($game->goal) - 1) {
+                    echo ",";
+                }
+            }
+            ?>
+        </p>
+        <p>Share:</p>
+        <p>Link: <a target="_parent" href="game.php?ID=<?php echo $_GET["ID"]; ?>">http://kwanwing.tk/SPEED?game.php?ID=<?php echo $_GET["ID"]; ?></a></p>
     </body>
 </html>
