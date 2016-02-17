@@ -20,76 +20,46 @@ foreach ($game->player AS $player) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>SPD4517 Individual Assignment (Web 2.0)</title>
         <meta name="description" content="An assignment developing a Ghost Leg game using Web 2.0 technologies">
-
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
         <!-- jQuery -->
         <script src="bower_components/jquery/dist/jquery.js" type="text/javascript"></script>
+
+        <!-- Bootstrap -->
+        <link href="bower_components/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet" type="text/css"/>
+        <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+        <script src="bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+
         <!--waitMe-->
         <link href="bower_components/waitMe/waitMe.css" rel="stylesheet" type="text/css"/>
         <script src="bower_components/waitMe/waitMe.js" type="text/javascript"></script>
+
         <link href="css/main.css" rel="stylesheet" type="text/css"/>
-        <style>
-            body{
-                margin: 0px;
-            }
-        </style>
+        <style>body{margin: 0px;}</style>
 
         <script>
-            var canvas = {
-<?php foreach ($game->player AS $i => $player): ?>
-                    ],
-<?php endforeach; ?>
-            };
-            var addline = function (context, area, y) {
-                $('#gameborad').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
-                $.ajax(
-                        {
-                            method: "POST",
-                            url: "Ajax/addline.php?ID=<?php echo isset($_GET["ID"]) ? $_GET["ID"] : ""; ?>",
-                            data: {
-                                area: area,
-                                y: y,
-                            },
-                            datatype: "json",
-                            success: function (jsonresult) {
-                                $('#gameborad').waitMe("hide");
-                                var result = JSON.parse(jsonresult);
-                                if (result.success) {
-                                    context.beginPath();
-                                    context.moveTo(0, y);
-                                    context.lineTo(300, y);
-                                    context.stroke();
-                                    context.beginPath();
-                                } else {
-                                    $("#errortext").html("Server Error! (Error:" + result + ")");
-                                }
-                            },
-                            fail: function (error) {
-                                $('#gameborad').waitMe("hide");
-                                $("#errortext").html("Server Error (Error:" + error + ")");
-                            },
-                        }
-                );
-            }
+            var canvas = {<?php foreach ($game->player AS $i => $player): ?>"canvas<?php echo $i ?>": [],<?php endforeach; ?>};
+            var id = '<?php echo isset($_GET["ID"]) ? $_GET["ID"] : ""; ?>';
             var game = JSON.parse('<?php echo json_encode($game); ?>');
         </script>
+        <script src="js/gameframe.js" type="text/javascript"></script>
     </head>
     <body>
         <p id="errortext"></p>
-        <div style="width:<?php echo (sizeof($game->player)) * 100 + 200; ?>px;margin:0px 0px;overflow: hidden;">
-            <?php foreach ($seats AS $seat): ?>
-                <div style="width: 100px;padding: 0;display: inline-block;"><?php echo $seat; ?></div>
+        <div style="width:<?php echo sizeof($game->player) * 100 + 200; ?>px;margin:0px 0px;overflow: hidden;">
+            <?php foreach ($game->player AS $i => $player): ?>
+            <div style="width: 100px;padding: 0;display: inline-block; text-align: center;"><?php echo isset($seats[$i])?$seats[$i]:""; ?></div>
             <?php endforeach; ?>
         </div>
-        <div id="gameborad" style="width:<?php echo (sizeof($game->player)) * 100; ?>px;margin:0px 50px;overflow: hidden;">
+        <div id="gameborad" style="width:<?php echo sizeof($game->player) * 100 + 200; ?>px;margin:0px 50px;overflow: hidden;">
             <?php for ($i = 0; $i < sizeof($game->player) - 1; $i++): ?>
                 <canvas id="canvas<?php echo $i ?>" width='100' height='500'></canvas>
             <?php endfor; ?>
         </div>
-        <div style="width:<?php echo (sizeof($game->player)) * 100 + 20; ?>px;margin:0px 0px;overflow: hidden;">
+        <div style="width:<?php echo sizeof($game->player) * 100 + 200; ?>px;margin:0px 0px;overflow: hidden;">
             <?php foreach ($game->goal AS $goal): ?>
-                <div style="width: 100px;padding: 0;display: inline-block;"><?php echo $goal; ?></div>
+                <div style="width: 100px;padding: 0;display: inline-block; text-align: center;"><?php echo $goal; ?></div>
             <?php endforeach; ?>
         </div>
     </body>

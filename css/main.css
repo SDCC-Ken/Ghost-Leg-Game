@@ -3,13 +3,14 @@
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
-
+canvas:first-child{
+    border-left: 1px solid #000;
+}
 canvas{
     width: 100px;
     height:500px;
-    border-left: 1px solid #000;
     border-right:  1px solid #000;
-    margin:1px;
+    margin:0px;
     padding:0px;
     overflow: hidden;
 }

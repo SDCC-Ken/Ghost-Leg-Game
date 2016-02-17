@@ -17,15 +17,7 @@
         <link href="bower_components/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet" type="text/css"/>
         <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css"/>
         <script src="bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
-        <style>
-            body {
-                padding-top: 50px;
-                padding-bottom: 20px;
-            }
-        </style>
-
-        <!-- jQuery Language -->
-        <script src="bower_components/jquery-lang-js/js/jquery-lang.js" type="text/javascript"></script>
+        <style>body {padding-top: 50px;padding-bottom: 20px;}</style>
 
         <link href="bower_components/waitMe/waitMe.css" rel="stylesheet" type="text/css"/>
         <script src="bower_components/waitMe/waitMe.js" type="text/javascript"></script>

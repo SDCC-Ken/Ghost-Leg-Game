@@ -1,3 +1,34 @@
+var addline = function (context, area, y) {
+                $('#gameborad').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
+                $.ajax(
+                        {
+                            method: "POST",
+                            url: "Ajax/addline.php?ID="+id,
+                            data: {
+                                area: area,
+                                y: y,
+                            },
+                            datatype: "json",
+                            success: function (jsonresult) {
+                                $('#gameborad').waitMe("hide");
+                                var result = JSON.parse(jsonresult);
+                                if (result.success) {
+                                    context.beginPath();
+                                    context.moveTo(0, y);
+                                    context.lineTo(300, y);
+                                    context.stroke();
+                                    context.beginPath();
+                                } else {
+                                    $("#errortext").html("Server Error! (Error:" + result + ")");
+                                }
+                            },
+                            fail: function (error) {
+                                $('#gameborad').waitMe("hide");
+                                $("#errortext").html("Server Error (Error:" + error + ")");
+                            },
+                        }
+                );
+            }
 function checkok(a, b) {
     return (Math.abs(a - b) > 10) ? true : false;
 }

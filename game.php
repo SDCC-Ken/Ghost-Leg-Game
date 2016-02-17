@@ -51,7 +51,6 @@ $game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such ga
                 $("#gameframe").attr("src", "gameframe.php?ID=<?php echo isset($_GET["ID"]) ? $_GET["ID"] : ""; ?>");
             };
             var setseat = function (seat) {
-                console.log(seat);
                 if (playerName !== null) {
                     $('#ChooseSeatDialogFace').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
                     $.ajax(
@@ -125,7 +124,7 @@ $game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such ga
     </head>
     <body>
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-controls="navbar">
                         <span class="sr-only">Toggle navigation</span>
@@ -141,8 +140,8 @@ $game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such ga
             </div>
         </nav>
 
-        <main class="container">
-            <iframe id="gameframe" src="" style="width:100%;height: 700px;"></iframe>
+        <main class="container-fluid">
+            <iframe id="gameframe" src="" style="width:100%;height:600px;"></iframe>
         </main>
 
         <footer class="navbar-fixed-bottom">
