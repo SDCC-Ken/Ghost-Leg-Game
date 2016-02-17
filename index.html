@@ -27,29 +27,34 @@
         <!-- jQuery Language -->
         <script src="bower_components/jquery-lang-js/js/jquery-lang.js" type="text/javascript"></script>
 
-        <!-- sweetalert-->
-        <link href="bower_components/sweetalert/dist/sweetalert.css" rel="stylesheet" type="text/css"/>
-        <script src="bower_components/sweetalert/dist/sweetalert.min.js" type="text/javascript"></script>
+        <link href="bower_components/waitMe/waitMe.css" rel="stylesheet" type="text/css"/>
+        <script src="bower_components/waitMe/waitMe.js" type="text/javascript"></script>
 
         <link rel="stylesheet" href="css/main.css">
-        <script src="js/main.js"></script>
+        <script src="js/main.js" type="text/javascript"></script>
+        <script src="js/index.js" type="text/javascript"></script>
     </head>
     <body>
-        <!--[if lt IE 8]>
-            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="index.html">SPD4517 Indivdual Assignment 1</a>
+                    <a class="navbar-brand" href="index.html">SPD4517 Individual Assignment 1</a>
                 </div>
             </div>
         </nav>
 
         <main class="container-fluid jumbotron">
             <h1>Ghost leg</h1>
-            <p>...</p>
+            <p>If you want to create a game.....</p>
             <p><a class="btn btn-primary btn-lg" href="creategame.php" role="button">Create New Game</a></p>
+            <p>If you want to join a game......</p>
+
+            <form id="playform">
+                <p id="errortext"></p>
+                <label>ID:<input id="gameid" type="text" /></label>
+                <a class="btn btn-primary btn-lg" id="playButton" role="button">Play</a>
+            </form>
+
         </main>
 
         <footer class="navbar-fixed-bottom">
