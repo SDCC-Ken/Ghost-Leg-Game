@@ -101,7 +101,7 @@ $game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such ga
                 <a href="game.php?ID=<?php echo $_GET["ID"]; ?>">Play</a>
             </div>
             <p>Share:</p>
-            <p>Link: <a href="game.php?ID=<?php echo $_GET["ID"]; ?>">http://kwanwing.tk/SPEED?game.php?ID=<?php echo $_GET["ID"]; ?></a></p>
+            <p>Link: <a href="game.php?ID=<?php echo $_GET["ID"]; ?>">http://skydreamcity.hk/SPEED/game.php?ID=<?php echo $_GET["ID"]; ?></a></p>
 
         </main>
         <footer class="navbar-fixed-bottom">

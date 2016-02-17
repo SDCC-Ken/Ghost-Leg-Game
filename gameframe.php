@@ -40,10 +40,10 @@ foreach ($game->player AS $player) {
 
         <script>
             var canvas = {
-<?php foreach ($game->player AS $i => $player): ?>
+<?php for ($i = 0; $i < sizeof($game->player) - 1; $i++): ?>
                     "canvas<?php echo $i ?>": [
                     ],
-<?php endforeach; ?>
+<?php endfor; ?>
             };
             var addline = function (context, area, y) {
                 $('#gameborad').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
@@ -131,7 +131,7 @@ foreach ($game->player AS $player) {
     </head>
     <body>
         <p id="errortext"></p>
-        <div style="width:<?php echo (sizeof($game->player)) * 100 + 100; ?>px;margin:0px 50px;overflow: hidden;">
+        <div style="width:<?php echo (sizeof($game->player)) * 100 + 200; ?>px;margin:0px 0px;overflow: hidden;">
             <?php foreach ($seats AS $seat): ?>
                 <div style="width: 100px;padding: 0;display: inline-block;"><?php echo $seat; ?></div>
             <?php endforeach; ?>
@@ -141,7 +141,7 @@ foreach ($game->player AS $player) {
                 <canvas id="canvas<?php echo $i ?>" width='100' height='500'></canvas>
             <?php endfor; ?>
         </div>
-        <div style="width:<?php echo (sizeof($game->player)) * 100 + 100; ?>px;margin:0px 50px;overflow: hidden;">
+        <div style="width:<?php echo (sizeof($game->player)) * 100 + 20; ?>px;margin:0px 0px;overflow: hidden;">
             <?php foreach ($game->goal AS $goal): ?>
                 <div style="width: 100px;padding: 0;display: inline-block;"><?php echo $goal; ?></div>
             <?php endforeach; ?>
