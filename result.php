@@ -1,8 +1,7 @@
 <?php
 include_once 'Class/JSONDatabase.php';
-print_r($_GET);
 $id = isset($_GET["ID"]) ? $_GET["ID"] : "" or exit("No ID");
-$playerseat = isset($_GET["playerseat"]) ? $_GET["playerseat"] : "" or exit("No player");
+$playerseat = isset($_GET["playerseat"]) ? $_GET["playerseat"] : "" ;
 $db = new JSONDatabase();
 $game = $db->readJSON($id) or exit("No Such game");
 $seats = array();
@@ -43,7 +42,7 @@ foreach ($game->player AS $player) {
         <script>
             var canvas = {<?php foreach ($game->player AS $i => $player): ?>"canvas<?php echo $i ?>": [],<?php endforeach; ?>};
             var id = '<?php echo $id; ?>';
-            var playerseat = '<?php echo $playerseat; ?>';
+            var playerseat = <?php echo $playerseat; ?>;
             var game = JSON.parse('<?php echo json_encode($game); ?>');
         </script>
         <script src="js/result.js" type="text/javascript"></script>

@@ -62,7 +62,7 @@ var drawAnswer = function (seat) {
 $(document).ready(function () {
     var context = $("#readgamecanvas")[0].getContext("2d");
     draw(context);
-    drawAnswer(playerseat);
+    
     for (var i = 0; i < game.player.length; i++) {
         $("#seat" + i).html(game.player[i].name);
     }
@@ -77,4 +77,5 @@ $(document).ready(function () {
             canvas["canvas" + i].push(510);
         }
     }
+    drawAnswer(playerseat);
 });

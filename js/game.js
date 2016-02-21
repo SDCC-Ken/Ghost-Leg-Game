@@ -115,7 +115,7 @@ var newplayer = function () {
                             $('#EnterNameDialog').modal('hide');
                             $("#main").removeClass("hidden");
                             if (game.end) {
-                                $("#gameframe").attr("src", "result.php?ID=" + id+"&playerseat="+result.seat);
+                                $("#gameframe").attr("src", "result.php?ID=" + id + "&playerseat=" + result.seat);
                                 finalize();
                             } else {
                                 if (result.finish) {
