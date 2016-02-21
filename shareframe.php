@@ -1,7 +1,8 @@
 <?php
 include_once 'Class/JSONDatabase.php';
+$id = isset($_GET["ID"]) ? $_GET["ID"] : "" or exit("No ID");
 $db = new JSONDatabase();
-$game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such game");
+$game = $db->readJSON($id) or exit("No Such game");
 ?>
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
@@ -37,7 +38,6 @@ $game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such ga
         <script src="bower_components/sweetalert/dist/sweetalert.min.js" type="text/javascript"></script>
 
         <link rel="stylesheet" href="css/main.css">
-        <script src="js/main.js"></script>
     </head>
     <body>
         <h1>Game (ID:<?php echo $_GET["ID"]; ?>)</h1>
@@ -67,6 +67,6 @@ $game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such ga
             ?>
         </p>
         <p>Share:</p>
-        <p>Link: <a target="_parent" href="game.php?ID=<?php echo $_GET["ID"]; ?>">http://kwanwing.tk/SPEED?game.php?ID=<?php echo $_GET["ID"]; ?></a></p>
+        <p>Link: <a target="_parent" href="game.php?ID=<?php echo $_GET["ID"]; ?>">http://spd4517ia.kwanwing.tk/game.php?ID=<?php echo $_GET["ID"]; ?></a></p>
     </body>
 </html>

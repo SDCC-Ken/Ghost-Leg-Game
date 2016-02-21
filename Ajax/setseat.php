@@ -16,6 +16,8 @@ foreach ($game->player AS $i => $player) {
         $game->player[$i] = array(
             "name" => $name,
             "seat" => $seat,
+            "email" => $game->player[$i]->email,
+            "finish" => FALSE,
         );
         echo $db->updateJSON($id, $game)?"S":"";
         break;

@@ -22,7 +22,9 @@ class Game {
             for ($i = 0; $i < $data["player"]; $i++) {
                 $player[$i] = array(
                     "name" => ($i == 0) ? $data["name"] : NULL,
+                    "email" => ($i == 0) ? $data["email"] : NULL,
                     "seat" => NULL,
+                    "finish" => FALSE,
                 );
             }
             shuffle($goal);
@@ -31,6 +33,7 @@ class Game {
                 "player" => $player,
                 "goal" => $goal,
                 "line" => array(),
+                "end" => FALSE,
             );
             if ($db->createJSON($data["gameid"], $game)) {
                 return array(

@@ -2,7 +2,7 @@
 include_once 'Class/JSONDatabase.php';
 $id = isset($_GET["ID"]) ? $_GET["ID"] : "" or exit("No ID");
 $db = new JSONDatabase();
-$game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such game");
+$game = $db->readJSON($id) or exit("No Such game");
 ?>
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
@@ -41,86 +41,14 @@ $game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such ga
         <!--waitMe-->
         <link href="bower_components/waitMe/waitMe.css" rel="stylesheet" type="text/css"/>
         <script src="bower_components/waitMe/waitMe.js" type="text/javascript"></script>
-        
-        <script src="js/game.js" type="text/javascript"></script>
-        <link rel="stylesheet" href="css/main.css">
+
+        <link rel="stylesheet" href="css/game.css">
         <script>
             var game = JSON.parse('<?php echo json_encode($game); ?>');
+            var id = '<?php echo isset($_GET["ID"]) ? $_GET["ID"] : ""; ?>';
             var playerName = null;
-            var finalize = function () {
-                $("#gameframe").attr("src", "gameframe.php?ID=<?php echo isset($_GET["ID"]) ? $_GET["ID"] : ""; ?>");
-            };
-            var setseat = function (seat) {
-                if (playerName !== null) {
-                    $('#ChooseSeatDialogFace').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
-                    $.ajax(
-                            {
-                                method: "POST",
-                                url: "Ajax/setseat.php?ID=<?php echo isset($_GET["ID"]) ? $_GET["ID"] : ""; ?>",
-                                data: {
-                                    seat: seat,
-                                    name: playerName,
-                                },
-                                datatype: "json",
-                                success: function (result) {
-                                    $('#ChooseSeatDialogFace').waitMe("hide");
-                                    if (result == "S") {
-                                        $('#ChooseSeatDialog').modal('hide');
-                                        finalize();
-                                    } else {
-                                        $("#seaterrortext").html("Server Error! (Error:" + result + ")");
-                                    }
-                                },
-                                fail: function (error) {
-                                    $('#ChooseSeatDialogFace').waitMe("hide");
-                                    $("#seaterrortext").html("Server Error (Error:" + error + ")");
-                                },
-                            }
-                    );
-                }
-            };
-            $(document).ready(function () {
-                $('#EnterNameDialog').modal({
-                    backdrop: 'static',
-                    keyboard: false
-                })
-                $('#EnterNameDialog').modal('show');
-                $('#enterNameButton').click(function () {
-                    $('#EnterNameDialogFace').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
-                    console.log($("#name").val());
-                    $.ajax(
-                            {
-                                method: "POST",
-                                url: "Ajax/addname.php?ID=<?php echo isset($_GET["ID"]) ? $_GET["ID"] : ""; ?>",
-                                data: {
-                                    name: $("#name").val(),
-                                },
-                                datatype: "json",
-                                success: function (jsonresult) {
-                                    $('#EnterNameDialogFace').waitMe("hide");
-                                    var result = JSON.parse(jsonresult);
-                                    if (result.success) {
-                                        playerName = $("#name").val();
-                                        if (result.seat !== null) {
-                                            $('#EnterNameDialog').modal('hide');
-                                            finalize();
-                                        } else {
-                                            findseat();
-                                        }
-                                    } else {
-                                        $("#errortext").html("Server Error! (Error:" + result + ")");
-                                    }
-
-                                },
-                                fail: function (error) {
-                                    $('#EnterNameDialogFace').waitMe("hide");
-                                    $("#errortext").html("Server Error (Error:" + error + ")");
-                                },
-                            }
-                    );
-                });
-            });
         </script>
+        <script src="js/game.js" type="text/javascript"></script>
     </head>
     <body>
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -141,7 +69,11 @@ $game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such ga
         </nav>
 
         <main class="container-fluid">
-            <iframe id="gameframe" src="" style="width:100%;height:600px;"></iframe>
+            <div id="main" class="hidden">
+                <iframe id="gameframe" src=""></iframe>
+                <p id="finishText"></p>
+                <button id="submitButton">Finish</button>
+            </div>
         </main>
 
         <footer class="navbar-fixed-bottom">
@@ -150,18 +82,22 @@ $game = $db->readJSON(isset($_GET["ID"]) ? $_GET["ID"] : "") or exit("No Such ga
 
 
         <div id="EnterNameDialog" class="modal fade" tabindex="-1" role="dialog">
-            <div id="EnterNameDialogFace" class="modal-dialog">
+            <div id="EnterNameDialogFace" class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">Enter your name</h4>
                     </div>
                     <div class="modal-body">
-                        <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
-                        <h1 class="text-center">What is your name?</h1>
-                        <p class="text-center"><label for="name"><input type="text" id="name" /></label></p>
+                        <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+                        <h1>Only enter your name if you have join the game.</h1>
+                        <p>&nbsp;</p>
+                        <h1>What is your name?</h1>
+                        <p><label for="name"><input type="text" id="name" /></label></p>
+                        <h1>What is your email?</h1>
+                        <p><label for="email"><input type="email" id="email" /></label></p>
+                        <p class="small">(We would send you the result by this email)</p>
                         <p id="errortext"></p>
-                        <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
-
+                        <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
                     </div>
                     <div class="modal-footer">
                         <button id="enterNameButton" type="button" class="btn btn-primary expand-right ladda" data-style="expand-right"><span class="ladda-label">Submit</span></button>

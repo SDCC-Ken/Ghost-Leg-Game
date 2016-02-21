@@ -1,6 +1,8 @@
 <?php
 include_once 'Class/JSONDatabase.php';
+print_r($_GET);
 $id = isset($_GET["ID"]) ? $_GET["ID"] : "" or exit("No ID");
+$playerseat = isset($_GET["playerseat"]) ? $_GET["playerseat"] : "" or exit("No player");
 $db = new JSONDatabase();
 $game = $db->readJSON($id) or exit("No Such game");
 $seats = array();
@@ -8,9 +10,6 @@ foreach ($game->player AS $player) {
     if ($player->name != NULL && $player->seat != NULL) {
         $seats[$player->seat] = $player->name;
     }
-}
-if($game->end == TRUE){
-    header('Location:result.php?ID='.$id);
 }
 ?>
 <!doctype html>
@@ -38,33 +37,44 @@ if($game->end == TRUE){
         <link href="bower_components/waitMe/waitMe.css" rel="stylesheet" type="text/css"/>
         <script src="bower_components/waitMe/waitMe.js" type="text/javascript"></script>
 
-        <link href="css/main.css" rel="stylesheet" type="text/css"/>
+        <link href="css/game.css" rel="stylesheet" type="text/css"/>
         <style>body{margin: 0px;}</style>
 
         <script>
             var canvas = {<?php foreach ($game->player AS $i => $player): ?>"canvas<?php echo $i ?>": [],<?php endforeach; ?>};
-            var id = '<?php echo isset($_GET["ID"]) ? $_GET["ID"] : ""; ?>';
+            var id = '<?php echo $id; ?>';
+            var playerseat = '<?php echo $playerseat; ?>';
             var game = JSON.parse('<?php echo json_encode($game); ?>');
         </script>
-        <script src="js/gameframe.js" type="text/javascript"></script>
+        <script src="js/result.js" type="text/javascript"></script>
     </head>
     <body>
-        <p id="errortext"></p>
-        <div style="width:<?php echo sizeof($game->player) * 100 + 200; ?>px;margin:0px 0px;overflow: hidden;">
-            <?php foreach ($game->player AS $i => $player): ?>
-            <div style="width: 100px;padding: 0;display: inline-block; text-align: center;"><?php echo isset($seats[$i])?$seats[$i]:""; ?></div>
-            <?php endforeach; ?>
+        <p id="errortext">Game end</p>
+        <p id="myText"></p>
+        <div class="table-responsive" style="width:<?php echo (sizeof($game->player)) * 100; ?>px;">
+            <table class="text-center">
+                <thead>
+                    <tr>
+                        <?php foreach ($game->player AS $i => $player): ?>
+                            <td id="seat<?php echo $i ?>" style="width: 100px;padding: 0"></td>
+                        <?php endforeach; ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="<?php echo sizeof($game->player); ?>" style="width:<?php echo (sizeof($game->player)) * 100; ?>px;margin:0px 50px;">
+                            <canvas id="readgamecanvas" width='<?php echo (sizeof($game->player)) * 100; ?>' height='500'></canvas>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <?php foreach ($game->goal AS $goal): ?>
+                            <td style="width: 100px;padding: 0"><?php echo $goal; ?></td>
+                        <?php endforeach; ?>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
-        <div id="gameborad" style="width:<?php echo sizeof($game->player) * 100 + 200; ?>px;margin:0px 50px;overflow: hidden;">
-            <?php for ($i = 0; $i < sizeof($game->player) - 1; $i++): ?>
-                <canvas id="canvas<?php echo $i ?>" width='100' height='500'></canvas>
-            <?php endfor; ?>
-        </div>
-        <div style="width:<?php echo sizeof($game->player) * 100 + 200; ?>px;margin:0px 0px;overflow: hidden;">
-            <?php foreach ($game->goal AS $goal): ?>
-                <div style="width: 100px;padding: 0;display: inline-block; text-align: center;"><?php echo $goal; ?></div>
-            <?php endforeach; ?>
-        </div>
-        
     </body>
 </html>
