@@ -107,12 +107,12 @@ $game = $db->readJSON($id) or exit("No Such game");
         </div><!-- /.modal -->
 
         <div id="ChooseSeatDialog" class="modal fade" tabindex="-1" role="dialog">
-            <div id="ChooseSeatDialogFace" class="modal-dialog">
+            <div id="ChooseSeatDialogFace" class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">Choose Seat</h4>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" style="overflow:scroll;">
                         <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
                         <div class="table-responsive" style="width:<?php echo (sizeof($game->player)) * 100; ?>px;">
                             <table class="text-center">

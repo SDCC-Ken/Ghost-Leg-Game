@@ -1,7 +1,8 @@
 <?php
 
-function sendemail($email,$name) {
+function sendemail($email, $name) {
     require "../Mailer/PHPMailerAutoload.php";
+    $id = isset($_POST["gameid"]) ? $_POST["gameid"] : "" ;
     $mail = new PHPMailer;
     $mail->isSMTP();
     $mail->Host = "mail.kwanwing.tk";
@@ -13,10 +14,23 @@ function sendemail($email,$name) {
     $mail->addAddress($email, $name);
     $mail->isHTML(true);
     $mail->Subject = "You have create a Ghost leg game!";
-    $mail->Body = "Testing";
-    $mail->AltBody = "Testing";
+    $mail->Body = ""
+            . "<p>Dear" + $name + "</p>"
+            . "<p>Hello, You have created the game. </p>"
+            . "<p>You can come to the link to share to other if you haven't do it.</p>"
+            . "<p><a href='http://spd4517ia.kwanwing.tk/share.php?ID=" + $id + "'>http://spd4517ia.kwanwing.tk/share.php?ID=" + $id + "</a></p>"
+            . "<p>Regards,</p>"
+            . "<p>Admin</p>";
+    $mail->AltBody = ""
+            . "Dear" + $name + "\n"
+            . "Hello, You have created the game. \n"
+            . "You can come to the link to share to other if you haven't do it.\n"
+            . "Link: http://spd4517ia.kwanwing.tk/share.php?ID=" + $id + "\n"
+            . "Regards,\n"
+            . "Admin\n";
     return $mail->send();
 }
+
 include_once '../Class/Game.php';
 include_once '../Class/JSONDatabase.php';
 $name = isset($_POST["name"]) ? $_POST["name"] : "" or exit("No Name");
@@ -34,7 +48,7 @@ if ($return["success"]) {
     echo json_encode(array(
         "success" => TRUE,
         "id" => $gameid,
-        "email" => sendemail($email,$name),
+        "email" => sendemail($email, $name),
     ));
 } else {
     echo json_encode(array(

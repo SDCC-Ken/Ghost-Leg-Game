@@ -40,10 +40,11 @@ foreach ($game->player AS $player) {
         <style>body{margin: 0px;}</style>
 
         <script>
-            var canvas = {<?php foreach ($game->player AS $i => $player): ?>"canvas<?php echo $i ?>": [],<?php endforeach; ?>};
+            var canvas = {<?php for ($i = 0;$i<sizeof($game->player)-1;$i++): ?>"canvas<?php echo $i ?>": [],<?php endfor; ?>};
             var id = '<?php echo $id; ?>';
             var playerseat = <?php echo $playerseat; ?>;
             var game = JSON.parse('<?php echo json_encode($game); ?>');
+            var maxcanvas = <?php echo sizeof($game->player)-1;?>;
         </script>
         <script src="js/result.js" type="text/javascript"></script>
     </head>

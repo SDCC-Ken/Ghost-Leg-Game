@@ -1,31 +1,37 @@
-var finalize = function () {
+var finalize = function (result) {
     if (!game.end) {
-        $("#submitButton").click(function () {
-            $('#main').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
-            $.ajax(
-                    {
-                        method: "POST",
-                        url: "Ajax/finish.php?ID=" + id,
-                        data: {
-                            name: playerName,
-                        },
-                        datatype: "json",
-                        success: function (result) {
-                            $('#main').waitMe("hide");
-                            if (result == "S") {
-                                $("#main").html("You cannot change because you have click finish button.");
-                            } else {
-                                $("#finishText").html("Server Error! (Error:" + result + ")");
-                            }
-                        },
-                        fail: function (error) {
-                            $('#main').waitMe("hide");
-                            $("#finishText").html("Server Error (Error:" + error + ")");
-                        },
-                    }
-            );
-        });
+        if (result.finish) {
+            $("#main").html("You cannot change because you have click finish button.");
+        } else {
+            $("#gameframe").attr("src", "gameframe.php?ID=" + id);
+            $("#submitButton").click(function () {
+                $('#main').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
+                $.ajax(
+                        {
+                            method: "POST",
+                            url: "Ajax/finish.php?ID=" + id,
+                            data: {
+                                name: playerName,
+                            },
+                            datatype: "json",
+                            success: function (result) {
+                                $('#main').waitMe("hide");
+                                if (result == "S") {
+                                    $("#main").html("You cannot change because you have click finish button.");
+                                } else {
+                                    $("#finishText").html("Server Error! (Error:" + result + ")");
+                                }
+                            },
+                            fail: function (error) {
+                                $('#main').waitMe("hide");
+                                $("#finishText").html("Server Error (Error:" + error + ")");
+                            },
+                        }
+                );
+            });
+        }
     } else {
+        $("#gameframe").attr("src", "result.php?ID=" + id + "&playerseat=" + result.seat);
         $("#submitButton").addClass("hidden");
     }
 
@@ -77,7 +83,8 @@ var setseat = function (seat) {
                         $('#ChooseSeatDialogFace').waitMe("hide");
                         if (result == "S") {
                             $('#ChooseSeatDialog').modal('hide');
-                            finalize();
+                            var mresult = {name:playerName,finish:false,seat:seat};
+                            finalize(mresult);
                         } else {
                             $("#seaterrortext").html("Server Error! (Error:" + result + ")");
                         }
@@ -114,17 +121,7 @@ var newplayer = function () {
                             playerName = $("#name").val();
                             $('#EnterNameDialog').modal('hide');
                             $("#main").removeClass("hidden");
-                            if (game.end) {
-                                $("#gameframe").attr("src", "result.php?ID=" + id + "&playerseat=" + result.seat);
-                                finalize();
-                            } else {
-                                if (result.finish) {
-                                    $("#main").html("You cannot change because you have click finish button.");
-                                } else {
-                                    (result.seat !== null) ? finalize() : findseat();
-                                }
-                            }
-
+                            (result.seat !== null) ? finalize(result) : findseat();
                         } else {
                             $("#errortext").html("Server Error! (Error:" + result.message + ")");
                         }

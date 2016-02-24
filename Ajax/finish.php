@@ -14,12 +14,24 @@ function sendemail() {
         $mail->Username = "kwanwing@kwanwing.tk";
         $mail->Password = "abcd1234!";
         $mail->Port = 25;
-        $mail->setFrom("kwanwing@kwanwing.tk", "Ghost leg");
+        $mail->setFrom("kwanwing@kwanwing.tk", "Ghost Leg Game");
         $mail->addAddress($player->email, $player->name);
         $mail->isHTML(true);
-        $mail->Subject = "You have create a Ghost leg game!";
-        $mail->Body = "Testing2";
-        $mail->AltBody = "Testing2";
+        $mail->Subject = "The game have ended. Check out what you get";
+        $mail->Body = ""
+                . "<p>Dear"+$player->name+"</p>"
+                . "<p>Hello, The game is end. </p>"
+                . "<p>You can come to the link to see what you get.</p>"
+                . "<p><a href='http://spd4517ia.kwanwing.tk/game.php?ID="+$id+"'>http://spd4517ia.kwanwing.tk/game.php?ID="+$id+"</a></p>"
+                . "<p>Regards,</p>"
+                . "<p>Admin</p>";
+        $mail->AltBody = ""
+                . "Dear"+$player->name+"\n"
+                . "Hello, The game is end. \n"
+                . "You can come to the link to see what you get\n"
+                . "Link: http://spd4517ia.kwanwing.tk/game.php?ID="+$id+"\n"
+                . "Regards,\n"
+                . "Admin\n";
         $ok = $mail->send();
     }
     return $ok;

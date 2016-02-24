@@ -1,0 +1,14 @@
+{
+  "name": "Ken_JQuery_Bootstrp_Alert",
+  "version": "0.1",
+  "main": "dist/js/ken-jquery-bootstrap-alert",
+  "ignore": [
+    ".jshintrc",
+    "**/*.txt"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "jquery": "^2.2.1"
+  },
+  "devDependencies": {}
+}

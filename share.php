@@ -1,3 +1,9 @@
+<?php
+include_once 'Class/JSONDatabase.php';
+$id = isset($_GET["ID"]) ? $_GET["ID"] : "" or exit("No ID");
+$db = new JSONDatabase();
+$game = $db->readJSON($id) or exit("No Such game");
+?>
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
@@ -38,8 +44,8 @@
             </div>
         </nav>
 
-        <main class="container-fluid jumbotron">
-            <iframe src="" />
+        <main class="container-fluid">
+            <iframe src="http://spd4517ia.kwanwing.tk/shareframe.php?ID=<?php echo $id;?>" ></iframe>
         </main>
 
         <footer class="navbar-fixed-bottom">

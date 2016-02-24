@@ -38,18 +38,19 @@
             </div>
         </nav>
 
-        <main class="container-fluid jumbotron">
-            <h1>Ghost leg</h1>
-            <p>If you want to create a game.....</p>
-            <p><a class="btn btn-primary btn-lg" href="creategame.php" role="button">Create New Game</a></p>
-            <p>If you want to join a game......</p>
-
-            <form id="playform">
-                <p id="errortext"></p>
-                <label>ID:<input id="gameid" type="text" /></label>
+        <main class="container-fluid">
+            <h1 class="text-center">Ghost Leg Game</h1>
+            <p>
+                <span>If you want to create a game.....</span>
+                <a class="btn btn-primary btn-lg" href="creategame.php" role="button">Create New Game</a>
+            </p>
+            <form id="playform" class="form-inline">
+                <div class="form-group">
+                    <span>If you want to join a game......</span>
+                    <label>Enter Game ID:<input id="gameid" type="text"></label>
+                </div>
                 <a class="btn btn-primary btn-lg" id="playButton" role="button">Play</a>
             </form>
-
         </main>
 
         <footer class="navbar-fixed-bottom">
