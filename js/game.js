@@ -1,8 +1,41 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+var finalize = function (result) {
+    if (!game.end) {
+        if (result.finish) {
+            $("#main").html("You cannot change because you have click finish button.");
+        } else {
+            $("#gameframe").attr("src", "gameframe.php?ID=" + id);
+            $("#submitButton").click(function () {
+                $('#main').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
+                $.ajax(
+                        {
+                            method: "POST",
+                            url: "Ajax/finish.php?ID=" + id,
+                            data: {
+                                name: playerName,
+                            },
+                            datatype: "json",
+                            success: function (result) {
+                                $('#main').waitMe("hide");
+                                if (result == "S") {
+                                    $("#main").html("You cannot change because you have click finish button.");
+                                } else {
+                                    $("#finishText").html("Server Error! (Error:" + result + ")");
+                                }
+                            },
+                            fail: function (error) {
+                                $('#main').waitMe("hide");
+                                $("#finishText").html("Server Error (Error:" + error + ")");
+                            },
+                        }
+                );
+            });
+        }
+    } else {
+        $("#gameframe").attr("src", "result.php?ID=" + id + "&playerseat=" + result.seat);
+        $("#submitButton").addClass("hidden");
+    }
+
+};
 var findseat = function () {
     $('#EnterNameDialog').modal('hide');
     $('#ChooseSeatDialog').modal({
@@ -34,4 +67,74 @@ var findseat = function () {
         }
     }
 }
+var setseat = function (seat) {
+    if (playerName !== null) {
+        $('#ChooseSeatDialogFace').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
+        $.ajax(
+                {
+                    method: "POST",
+                    url: "Ajax/setseat.php?ID=" + id,
+                    data: {
+                        seat: seat,
+                        name: playerName,
+                    },
+                    datatype: "json",
+                    success: function (result) {
+                        $('#ChooseSeatDialogFace').waitMe("hide");
+                        if (result == "S") {
+                            $('#ChooseSeatDialog').modal('hide');
+                            var mresult = {name:playerName,finish:false,seat:seat};
+                            finalize(mresult);
+                        } else {
+                            $("#seaterrortext").html("Server Error! (Error:" + result + ")");
+                        }
+                    },
+                    fail: function (error) {
+                        $('#ChooseSeatDialogFace').waitMe("hide");
+                        $("#seaterrortext").html("Server Error (Error:" + error + ")");
+                    },
+                }
+        );
+    }
+};
+var newplayer = function () {
+    $('#EnterNameDialog').modal({
+        backdrop: 'static',
+        keyboard: false
+    })
+    $('#EnterNameDialog').modal('show');
+    $('#enterNameButton').click(function () {
+        $('#EnterNameDialogFace').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
+        $.ajax(
+                {
+                    method: "POST",
+                    url: "Ajax/addname.php?ID=" + id,
+                    data: {
+                        name: $("#name").val(),
+                        email: $("#email").val(),
+                    },
+                    datatype: "json",
+                    success: function (jsonresult) {
+                        $('#EnterNameDialogFace').waitMe("hide");
+                        var result = JSON.parse(jsonresult);
+                        if (result.success) {
+                            playerName = $("#name").val();
+                            $('#EnterNameDialog').modal('hide');
+                            $("#main").removeClass("hidden");
+                            (result.seat !== null) ? finalize(result) : findseat();
+                        } else {
+                            $("#errortext").html("Server Error! (Error:" + result.message + ")");
+                        }
 
+                    },
+                    fail: function (error) {
+                        $('#EnterNameDialogFace').waitMe("hide");
+                        $("#errortext").html("Server Error (Error:" + error + ")");
+                    },
+                }
+        );
+    });
+}
+$(document).ready(function () {
+    newplayer();
+});

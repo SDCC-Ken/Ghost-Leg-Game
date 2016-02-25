@@ -17,21 +17,12 @@
         <link href="bower_components/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet" type="text/css"/>
         <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css"/>
         <script src="bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
-        <style>
-            body {
-                padding-top: 50px;
-                padding-bottom: 20px;
-            }
-        </style>
-
-        <!-- jQuery Language -->
-        <script src="bower_components/jquery-lang-js/js/jquery-lang.js" type="text/javascript"></script>
+        <style>body {padding-top: 50px;padding-bottom: 20px;}</style>
 
         <link href="bower_components/waitMe/waitMe.css" rel="stylesheet" type="text/css"/>
         <script src="bower_components/waitMe/waitMe.js" type="text/javascript"></script>
 
-        <link rel="stylesheet" href="css/main.css">
-        <script src="js/main.js"></script>
+        <link rel="stylesheet" href="css/main.css" />
         <script src="js/creategame.js" type="text/javascript"></script>
     </head>
     <body>
@@ -48,6 +39,11 @@
                 <div class="form-group">
                     <label for="name">Your Name</label>
                     <input type="text" class="form-control" id="name" name="name" required="required" />
+                </div>
+                <div class="form-group">
+                    <label for="name">Your Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required="required" />
+                    <span class="help-block">We will send you email of the result.</span>
                 </div>
                 <div class="form-group">
                     <label for="gameid">Game ID</label>

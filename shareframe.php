@@ -23,34 +23,50 @@ $game = $db->readJSON($id) or exit("No Such game");
         <link href="bower_components/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet" type="text/css"/>
         <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css"/>
         <script src="bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
-        <style>body {padding-top: 50px;padding-bottom: 20px;}</style>
+        <style>
+            body {
+                padding-top: 50px;
+                padding-bottom: 20px;
+            }
+        </style>
 
         <!-- jQuery Language -->
         <script src="bower_components/jquery-lang-js/js/jquery-lang.js" type="text/javascript"></script>
 
-        <link href="bower_components/waitMe/waitMe.css" rel="stylesheet" type="text/css"/>
-        <script src="bower_components/waitMe/waitMe.js" type="text/javascript"></script>
+        <!-- sweetalert-->
+        <link href="bower_components/sweetalert/dist/sweetalert.css" rel="stylesheet" type="text/css"/>
+        <script src="bower_components/sweetalert/dist/sweetalert.min.js" type="text/javascript"></script>
 
         <link rel="stylesheet" href="css/main.css">
-        <script src="js/main.js" type="text/javascript"></script>
-        <script src="js/index.js" type="text/javascript"></script>
     </head>
     <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="index.html">SPD4517 Individual Assignment 1</a>
-                </div>
-            </div>
-        </nav>
-
-        <main class="container-fluid">
-            <iframe src="http://spd4517ia.kwanwing.tk/shareframe.php?ID=<?php echo $id;?>" ></iframe>
-        </main>
-
-        <footer class="navbar-fixed-bottom">
-            <p>&copy; Chan Kwan Wing 14011142S</p>
-        </footer>      
-
+        <h1>Game (ID:<?php echo $_GET["ID"]; ?>)</h1>
+        <p>Creator: <?php echo $game->creator; ?></p>
+        <p>Player: </p>
+        <?php
+        $noplayer = 0;
+        foreach ($game->player AS $player):
+            if ($player->name == NULL):
+                $noplayer++;
+            else:
+                ?>
+                <p><?php echo $player->name; ?></p>
+            <?php
+            endif;
+        endforeach;
+        ?>
+        <p><?php echo $noplayer ?> more  player can join</p>
+        <p>Goals: 
+            <?php
+            foreach ($game->goal AS $i => $goal) {
+                echo $goal;
+                if ($i != sizeof($game->goal) - 1) {
+                    echo ",";
+                }
+            }
+            ?>
+        </p>
+        <p>Share:</p>
+        <p>Link: <a target="_parent" href="game.php?ID=<?php echo $_GET["ID"]; ?>">http://spd4517ia.kwanwing.tk/game.php?ID=<?php echo $_GET["ID"]; ?></a></p>
     </body>
 </html>

@@ -1,0 +1,24 @@
+{
+  "name": "Ken_JQuery_Bootstrp_Alert",
+  "main": "dist/js/ken-jquery-bootstrap-alert",
+  "ignore": [
+    ".jshintrc",
+    "**/*.txt"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "jquery": "^2.2.1"
+  },
+  "devDependencies": {},
+  "homepage": "https://github.com/SDCC-Ken/Ken-JQuery-Bootstrap-Alert",
+  "_release": "73cf574476",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "73cf574476963090544f0ebb9e68e01a7ba56ec7"
+  },
+  "_source": "git://github.com/SDCC-Ken/Ken-JQuery-Bootstrap-Alert.git",
+  "_target": "*",
+  "_originalSource": "Ken_JQuery_Bootstrp_Alert",
+  "_direct": true
+}
