@@ -1,5 +1,6 @@
 $("document").ready(function () {
-    $("#playButton").click(function () {
+    $("#playform").submit(function (e) {
+        e.preventDefault();
         $('#playform').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
         $.ajax(
                 {
@@ -7,15 +8,15 @@ $("document").ready(function () {
                     url: "Ajax/checkgame.php?ID="+$("#gameid").val(),
                     success: function (result) {
                         $('#playform').waitMe("hide");
-                        if (result == "S") {
+                        if (result.success) {
                             window.location.href = "game.php?ID="+$("#gameid").val();
                         } else {
-                            $("#errortext").html("Error:" + result );
+                            $("#errortext").kenJqueryBootstrapAlert({type: "danger", close: true,"message":"Error:" + result.message});
                         }
                     },
                     fail: function (error) {
-                        $('#ChooseSeatDialogFace').waitMe("hide");
-                        $("#errortext").html("Error:" + error );
+                        $('#playform').waitMe("hide");
+                        $("#errortext").kenJqueryBootstrapAlert({type: "danger", close: true,"message":"Error:" + error});
                     },
                 }
         );

@@ -1,6 +1,27 @@
 <?php
+header('Content-Type: application/json;');
 include_once '../Class/JSONDatabase.php';
-$id = isset($_GET["ID"]) ? $_GET["ID"] : "" or exit("No ID");
-$db = new JSONDatabase();
-$game = $db->readJSON($id) or exit("No Such game");
-echo "S";
+if (isset($_GET["ID"])) {
+    $db = new JSONDatabase();
+    if ($db->readJSON($_GET["ID"])) {
+        echo json_encode(
+                array(
+                    "success" => true,
+                )
+        );
+    } else {
+        echo json_encode(
+                array(
+                    "success" => false,
+                    "message" => "No such game"
+                )
+        );
+    }
+} else {
+    echo json_encode(
+            array(
+                "success" => false,
+                "message" => "Please Enter ID"
+            )
+    );
+}

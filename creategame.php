@@ -21,6 +21,8 @@
 
         <link href="bower_components/waitMe/waitMe.css" rel="stylesheet" type="text/css"/>
         <script src="bower_components/waitMe/waitMe.js" type="text/javascript"></script>
+        
+        <script src="bower_components/Ken_JQuery_Bootstrp_Alert/dist/js/ken-jquery-bootstrap-alert.js" type="text/javascript"></script>
 
         <link rel="stylesheet" href="css/main.css" />
         <script src="js/creategame.js" type="text/javascript"></script>
@@ -35,14 +37,16 @@
         </nav>
         <main class="container-fluid">
             <form id="createform">
-                <p id="errortext"></p>
+                <div id="errortext" class="form-group">
+                    
+                </div>
                 <div class="form-group">
                     <label for="name">Your Name</label>
                     <input type="text" class="form-control" id="name" name="name" required="required" />
                 </div>
                 <div class="form-group">
                     <label for="name">Your Email</label>
-                    <input type="email" class="form-control" id="email" name="email" required="required" />
+                    <input type="email" class="form-control" id="email" name="email" />
                     <span class="help-block">We will send you email of the result.</span>
                 </div>
                 <div class="form-group">
@@ -68,7 +72,7 @@
                     </div>
                     <span class="help-block">When you type the no of player, the number of goal input would display.</span>
                 </div>
-                <button id="createButton" type="button" class="btn btn-default" name="submit">Create</button>
+                <button id="createButton" type="submit" class="btn btn-default" name="submit">Create</button>
             </form>
         </main>
 
@@ -85,7 +89,6 @@
                     <div class="modal-body">
                         <iframe id="share" src="" style="width:100%;height: 700px;"></iframe>
                     </div>
-
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
