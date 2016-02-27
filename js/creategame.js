@@ -1,27 +1,40 @@
 $("document").ready(function () {
     //initialize instance
     var enjoyhint_instance = new EnjoyHint({});
-
-//simple config. 
-//Only one step - highlighting(with description) "New" button 
-//hide EnjoyHint after a click on the button.
     var enjoyhint_script_steps = [
         {
-            "key #name": "Please Enter your name and press tab",
-            keyCode: 9
+            "key #name": "Please Enter your name and Press tab",
+            keyCode: 9,
+            showNext:true,
         },
         {
-            "key #email": "Please Enter your email and press tab",
-            keyCode: 9
+            "key #email": "Please Enter your email (We will send you the result this email) and Press tab",
+            keyCode: 9,
+            showNext:true,
+        },
+        {
+            "key #gameid": "Please Enter game ID and Press tab",
+            keyCode: 9,
+            showNext:true,
+        },
+        {
+            "key #player": "Please Enter no of player and Press tab",
+            keyCode: 9,
+            showNext:true,
+        },
+        {
+            "key #goal": "Please Enter the goals and Press tab",
+            keyCode: 9,
+            showNext:true,
+        },
+        {
+            "click #createButton": "Click to Create",
         },
     ];
-
-//set script config
     enjoyhint_instance.set(enjoyhint_script_steps);
-
-//run Enjoyhint script
     enjoyhint_instance.run();
-    $("#player").change(function () {
+    $("#player").change(function (e) {
+        e.preventDefault();
         var goals = [];
         $(".goalinput").each(function () {
             if ($(this).is("input")) {
@@ -54,6 +67,7 @@ $("document").ready(function () {
                 }
             });
         }
+        $(this).trigger('change');
     });
     $("form#createform :input").each(function () {
         $(this).change(function () {
@@ -97,7 +111,8 @@ $("document").ready(function () {
                         var result = JSON.parse(jsonresult);
                         $('#createform').waitMe("hide");
                         if (result.success) {
-                            console.log(result.email);
+                            setLocal("Ghost_Leg_player_name",$("#name").val());
+                            setLocal("Ghost_Leg_player_email",$("#email").val());
                             $('#ShareDialog').modal({
                                 backdrop: 'static',
                                 keyboard: false

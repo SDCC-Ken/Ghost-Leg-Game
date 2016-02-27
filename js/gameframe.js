@@ -19,12 +19,12 @@ var addline = function (context, area, y) {
                         context.stroke();
                         context.beginPath();
                     } else {
-                        $("#errortext").html("Server Error! (Error:" + result + ")");
+                        $("#errortext").kenJqueryBootstrapAlert({type: "danger", close: true, "message": "Error:" + result});
                     }
                 },
                 fail: function (error) {
                     $('#gameborad').waitMe("hide");
-                    $("#errortext").html("Server Error (Error:" + error + ")");
+                    $("#errortext").kenJqueryBootstrapAlert({type: "danger", close: true, "message": "Error:" + error});
                 },
             }
     );
@@ -35,12 +35,14 @@ function checkok(a, b) {
 $(document).ready(function () {
     for (var i = 0; i < game.line.length; i++) {
         var context = $("#" + game.line[i].area)[0].getContext("2d");
-        context.beginPath();
-        context.moveTo(0, game.line[i].y);
-        context.lineTo(300, game.line[i].y);
-        context.stroke();
-        context.beginPath();
+        context.clearRect(0, 0, $("#" + game.line[i].area)[0].width, $("#" + game.line[i].area)[0].height);
+//        context.beginPath();
+//        context.moveTo(0, game.line[i].y);
+//        context.lineTo(300, game.line[i].y);
+//        context.stroke();
+//        context.beginPath();
     }
+    console.log(1);
     $('canvas').on({
         mousedown: function (e) {
             var ok = false;

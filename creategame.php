@@ -28,6 +28,7 @@
         <link href="bower_components/enjoyhint/enjoyhint.css" rel="stylesheet" type="text/css"/>
         
         <link rel="stylesheet" href="css/main.css" />
+        <script src="js/main.js" type="text/javascript"></script>
         <script src="js/creategame.js" type="text/javascript"></script>
     </head>
     <body>

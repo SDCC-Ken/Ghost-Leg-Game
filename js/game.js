@@ -1,9 +1,11 @@
 var finalize = function (result) {
     if (!game.end) {
         if (result.finish) {
-            $("#main").html("You cannot change because you have click finish button.");
+            $("#main").html("");
+            $("#main").kenJqueryBootstrapAlert({type: "danger", close: false, "message": "You cannot change because you have click finish button."});
         } else {
             $("#gameframe").attr("src", "gameframe.php?ID=" + id);
+            $("#finishText").kenJqueryBootstrapAlert({type: "info", close: true, "message": "Click the game to add line and click finish to finish your session."});
             $("#submitButton").click(function () {
                 $('#main').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
                 $.ajax(
@@ -17,14 +19,15 @@ var finalize = function (result) {
                             success: function (result) {
                                 $('#main').waitMe("hide");
                                 if (result == "S") {
-                                    $("#main").html("You cannot change because you have click finish button.");
+                                    $("#main").html("");
+                                    $("#main").kenJqueryBootstrapAlert({type: "success", close: false, "message": "You cannot change because you have click finish button."});
                                 } else {
-                                    $("#finishText").html("Server Error! (Error:" + result + ")");
+                                    $("#finishText").kenJqueryBootstrapAlert({type: "danger", close: true, "message": "Error:" + result});
                                 }
                             },
                             fail: function (error) {
                                 $('#main').waitMe("hide");
-                                $("#finishText").html("Server Error (Error:" + error + ")");
+                                $("#finishText").kenJqueryBootstrapAlert({type: "danger", close: true, "message": "Error:" + error});
                             },
                         }
                 );
@@ -53,17 +56,9 @@ var findseat = function () {
         context.beginPath();
         $("#seat" + i).html('<button onClick="setseat(' + i + ')" type="button" class="btn btn-primary expand-right ladda" data-style="expand-right"><span class="ladda-label">Seat ' + i + '</span></button>');
     }
-    var context = $("#readgamecanvas")[0].getContext("2d");
     for (var i = 0; i < game.player.length; i++) {
-        var x = 50 + i * 100;
-        context.beginPath();
-        context.moveTo(x, 0);
-        context.lineTo(x, 500);
-        context.stroke();
-        for (var i = 0; i < game.player.length; i++) {
-            if (game.player[i].seat !== null) {
-                $("#seat" + game.player[i].seat).html(game.player[i].name);
-            }
+        if (game.player[i].seat !== null) {
+            $("#seat" + game.player[i].seat).html(game.player[i].name);
         }
     }
 }
@@ -81,29 +76,41 @@ var setseat = function (seat) {
                     datatype: "json",
                     success: function (result) {
                         $('#ChooseSeatDialogFace').waitMe("hide");
-                        if (result == "S") {
+                        if (result === "S") {
                             $('#ChooseSeatDialog').modal('hide');
-                            var mresult = {name:playerName,finish:false,seat:seat};
-                            finalize(mresult);
+                            finalize({name: playerName, finish: false, seat: seat});
                         } else {
-                            $("#seaterrortext").html("Server Error! (Error:" + result + ")");
+                            $("#seaterrortext").kenJqueryBootstrapAlert({type: "danger", close: true, "message": "Error:" + result});
                         }
                     },
                     fail: function (error) {
                         $('#ChooseSeatDialogFace').waitMe("hide");
-                        $("#seaterrortext").html("Server Error (Error:" + error + ")");
+                        $("#seaterrortext").kenJqueryBootstrapAlert({type: "danger", close: true, "message": "Error:" + error});
                     },
                 }
         );
     }
 };
 var newplayer = function () {
-    $('#EnterNameDialog').modal({
-        backdrop: 'static',
-        keyboard: false
-    })
-    $('#EnterNameDialog').modal('show');
-    $('#enterNameButton').click(function () {
+    $("form#EnterNameDialogForm :input").each(function () {
+        $(this).change(function () {
+            if ($(this).is(":invalid")) {
+                $(this).siblings(".form-control-feedback").removeClass("glyphicon-ok");
+                $(this).siblings(".form-control-feedback").addClass("glyphicon-remove");
+                $(this).siblings(".sr-only").html("(error)");
+                $(this).parent(".form-group").removeClass("has-success");
+                $(this).parent(".form-group").addClass("has-error");
+            } else {
+                $(this).siblings(".form-control-feedback").removeClass("glyphicon-remove");
+                $(this).siblings(".form-control-feedback").addClass("glyphicon-ok");
+                $(this).siblings(".sr-only").html("(success)");
+                $(this).parent(".form-group").removeClass("has-error");
+                $(this).parent(".form-group").addClass("has-success");
+            }
+        });
+    });
+    $('#EnterNameDialogForm').submit(function (e) {
+        e.preventDefault();
         $('#EnterNameDialogFace').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
         $.ajax(
                 {
@@ -119,21 +126,36 @@ var newplayer = function () {
                         var result = JSON.parse(jsonresult);
                         if (result.success) {
                             playerName = $("#name").val();
+                            setLocal("Ghost_Leg_player_name", $("#name").val());
+                            setLocal("Ghost_Leg_player_email", $("#email").val());
                             $('#EnterNameDialog').modal('hide');
                             $("#main").removeClass("hidden");
                             (result.seat !== null) ? finalize(result) : findseat();
                         } else {
-                            $("#errortext").html("Server Error! (Error:" + result.message + ")");
+                            $("#errortext").kenJqueryBootstrapAlert({type: "danger", close: true, "message": "Error:" + result.message});
                         }
 
                     },
                     fail: function (error) {
                         $('#EnterNameDialogFace').waitMe("hide");
-                        $("#errortext").html("Server Error (Error:" + error + ")");
+                        $("#errortext").kenJqueryBootstrapAlert({type: "danger", close: true, "message": "Error:" + error});
                     },
                 }
         );
     });
+    $('#EnterNameDialog').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+    $('#EnterNameDialog').modal('show');
+    if (getLocal("Ghost_Leg_player_name") !== null) {
+        $("#name").val(getLocal("Ghost_Leg_player_name"));
+        $("#name").change();
+    }
+    if (getLocal("Ghost_Leg_player_email") !== null) {
+        $("#email").val(getLocal("Ghost_Leg_player_email"));
+        $("#email").change();
+    }
 }
 $(document).ready(function () {
     newplayer();

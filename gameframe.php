@@ -9,8 +9,8 @@ foreach ($game->player AS $player) {
         $seats[$player->seat] = $player->name;
     }
 }
-if($game->end == TRUE){
-    header('Location:result.php?ID='.$id);
+if ($game->end == TRUE) {
+    header('Location:result.php?ID=' . $id);
 }
 ?>
 <!doctype html>
@@ -38,6 +38,11 @@ if($game->end == TRUE){
         <link href="bower_components/waitMe/waitMe.css" rel="stylesheet" type="text/css"/>
         <script src="bower_components/waitMe/waitMe.js" type="text/javascript"></script>
 
+        <script src="bower_components/Ken_JQuery_Bootstrp_Alert/dist/js/ken-jquery-bootstrap-alert.js" type="text/javascript"></script>
+
+        <script src="bower_components/enjoyhint/enjoyhint.js" type="text/javascript"></script>
+        <link href="bower_components/enjoyhint/enjoyhint.css" rel="stylesheet" type="text/css"/>
+
         <link href="css/main.css" rel="stylesheet" type="text/css"/>
         <style>body{margin: 0px;}</style>
 
@@ -52,7 +57,7 @@ if($game->end == TRUE){
         <p id="errortext"></p>
         <div style="width:<?php echo sizeof($game->player) * 100 + 200; ?>px;margin:0px 0px;overflow: hidden;">
             <?php foreach ($game->player AS $i => $player): ?>
-            <div style="width: 100px;padding: 0;display: inline-block; text-align: center;"><?php echo isset($seats[$i])?$seats[$i]:""; ?></div>
+                <div style="width: 100px;padding: 0;display: inline-block; text-align: center;"><?php echo isset($seats[$i]) ? $seats[$i] : ""; ?></div>
             <?php endforeach; ?>
         </div>
         <div id="gameborad" style="width:<?php echo sizeof($game->player) * 100 + 200; ?>px;margin:0px 50px;overflow: hidden;">
@@ -65,6 +70,6 @@ if($game->end == TRUE){
                 <div style="width: 100px;padding: 0;display: inline-block; text-align: center;"><?php echo $goal; ?></div>
             <?php endforeach; ?>
         </div>
-        
+
     </body>
 </html>

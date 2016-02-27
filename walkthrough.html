@@ -70,22 +70,51 @@
         </nav>
 
         <main class="container-fluid">
-            <h1 class="text-center">Ghost Leg Game</h1>
-            <p>
-                <span>If you want to create a game.....</span>
-                <a class="btn btn-primary btn-lg" href="creategame.php" role="button">Create New Game</a>
-            </p>
-            <div id="errortext" class="form-group">
-
-            </div>
-            <form id="playform" class="form-inline">
-
-                <div class="form-group">
-                    <span>If you want to join a game......</span>
-                    <label>Enter Game ID:<input id="gameid" type="text"></label>
+            <h1 class="text-center">Game Walkthrough</h1>
+            <div class="panel-group" id="accordion" role="tablist">
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-controls="collapseOne">
+                                Create Game
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            
+                        </div>
+                    </div>
                 </div>
-                <button class="btn btn-primary btn-lg" type="submit">Play</button>
-            </form>
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingTwo">
+                        <h4 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-controls="collapseTwo">
+                                Play Game
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                        <div class="panel-body">
+                        
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingThree">
+                        <h4 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-controls="collapseThree">
+                                Check Result
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                        <div class="panel-body">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
         <footer class="navbar-fixed-bottom">
             <p>&copy; Chan Kwan Wing 14011142S</p>

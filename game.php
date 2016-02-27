@@ -34,15 +34,17 @@ $game = $db->readJSON($id) or exit("No Such game");
         <!-- jQuery Language -->
         <script src="bower_components/jquery-lang-js/js/jquery-lang.js" type="text/javascript"></script>
 
-        <!-- sweetalert-->
-        <link href="bower_components/sweetalert/dist/sweetalert.css" rel="stylesheet" type="text/css"/>
-        <script src="bower_components/sweetalert/dist/sweetalert.min.js" type="text/javascript"></script>
-
         <!--waitMe-->
         <link href="bower_components/waitMe/waitMe.css" rel="stylesheet" type="text/css"/>
         <script src="bower_components/waitMe/waitMe.js" type="text/javascript"></script>
 
-        <link rel="stylesheet" href="css/game.css">
+        <script src="bower_components/Ken_JQuery_Bootstrp_Alert/dist/js/ken-jquery-bootstrap-alert.js" type="text/javascript"></script>
+
+        <script src="bower_components/enjoyhint/enjoyhint.js" type="text/javascript"></script>
+        <link href="bower_components/enjoyhint/enjoyhint.css" rel="stylesheet" type="text/css"/>
+
+        <link rel="stylesheet" href="css/game.css" />
+        <script src="js/main.js" type="text/javascript"></script>
         <script>
             var game = JSON.parse('<?php echo json_encode($game); ?>');
             var id = '<?php echo isset($_GET["ID"]) ? $_GET["ID"] : ""; ?>';
@@ -70,8 +72,8 @@ $game = $db->readJSON($id) or exit("No Such game");
 
         <main class="container-fluid">
             <div id="main" class="hidden">
+                <div  id="finishText"></div>
                 <iframe id="gameframe" src=""></iframe>
-                <p id="finishText"></p>
                 <button id="submitButton">Finish</button>
             </div>
         </main>
@@ -84,28 +86,35 @@ $game = $db->readJSON($id) or exit("No Such game");
         <div id="EnterNameDialog" class="modal fade" tabindex="-1" role="dialog">
             <div id="EnterNameDialogFace" class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Enter your name</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
-                        <h1>Only enter your name if you have join the game.</h1>
-                        <p>&nbsp;</p>
-                        <h1>What is your name?</h1>
-                        <p><label for="name"><input type="text" id="name" /></label></p>
-                        <h1>What is your email?</h1>
-                        <p><label for="email"><input type="email" id="email" /></label></p>
-                        <p class="small">(We would send you the result by this email)</p>
-                        <p id="errortext"></p>
-                        <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button id="enterNameButton" type="button" class="btn btn-primary expand-right ladda" data-style="expand-right"><span class="ladda-label">Submit</span></button>
-                    </div>
+                    <form id="EnterNameDialogForm">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Enter Your Name and Email</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="errortext" class="form-group">
+                                <div class="alert alert-info" role="alert">Enter your name and email to join the game</div>
+                            </div>
+                            <div class="form-group has-feedback inner">
+                                <label for="name">Your Name</label>
+                                <input type="text" class="form-control" id="name" name="name" required="required" />
+                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                <span class="sr-only">(error)</span>
+                            </div>
+                            <div class="form-group has-feedback">
+                                <label for="name">Your Email</label>
+                                <input type="email" class="form-control" id="email" name="email" />
+                                <span class="help-block">We will send you email of the result.</span>
+                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                <span class="sr-only">(error)</span>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="enterNameButton" type="submit" class="btn btn-primary expand-right ladda" data-style="expand-right"><span class="ladda-label">Submit</span></button>
+                        </div>
+                    </form>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-
         <div id="ChooseSeatDialog" class="modal fade" tabindex="-1" role="dialog">
             <div id="ChooseSeatDialogFace" class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -113,7 +122,9 @@ $game = $db->readJSON($id) or exit("No Such game");
                         <h4 class="modal-title">Choose Seat</h4>
                     </div>
                     <div class="modal-body" style="overflow:scroll;">
-                        <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+                        <div id="seaterrortext" class="form-group">
+                            <div class="alert alert-info" role="alert">Choose seat by clicking it.</div>
+                        </div>
                         <div class="table-responsive" style="width:<?php echo (sizeof($game->player)) * 100; ?>px;">
                             <table class="text-center">
                                 <thead>
@@ -139,8 +150,6 @@ $game = $db->readJSON($id) or exit("No Such game");
                                 </tfoot>
                             </table>
                         </div>
-                        <p id="seaterrortext"></p>
-                        <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
                     </div>
 
                 </div><!-- /.modal-content -->
