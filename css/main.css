@@ -19,3 +19,6 @@ iframe{
     height:650px;
     border: 0px;
 }
+#walkthrough-content {
+    display: none;
+}

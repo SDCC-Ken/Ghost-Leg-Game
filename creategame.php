@@ -21,15 +21,18 @@
 
         <link href="bower_components/waitMe/waitMe.css" rel="stylesheet" type="text/css"/>
         <script src="bower_components/waitMe/waitMe.js" type="text/javascript"></script>
-        
-        <script src="bower_components/Ken_JQuery_Bootstrp_Alert/dist/js/ken-jquery-bootstrap-alert.js" type="text/javascript"></script>
 
+        <script src="bower_components/Ken_JQuery_Bootstrp_Alert/dist/js/ken-jquery-bootstrap-alert.js" type="text/javascript"></script>
+        
+        <script src="bower_components/enjoyhint/enjoyhint.js" type="text/javascript"></script>
+        <link href="bower_components/enjoyhint/enjoyhint.css" rel="stylesheet" type="text/css"/>
+        
         <link rel="stylesheet" href="css/main.css" />
         <script src="js/creategame.js" type="text/javascript"></script>
     </head>
     <body>
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="index.html">SPD4517 Indivdual Assignment 1</a>
                 </div>
@@ -38,37 +41,37 @@
         <main class="container-fluid">
             <form id="createform">
                 <div id="errortext" class="form-group">
-                    
+
                 </div>
-                <div class="form-group">
+                <div id="NameField" class="form-group has-feedback inner">
                     <label for="name">Your Name</label>
                     <input type="text" class="form-control" id="name" name="name" required="required" />
+                    <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                    <span class="sr-only">(error)</span>
                 </div>
-                <div class="form-group">
+                <div class="form-group has-feedback">
                     <label for="name">Your Email</label>
                     <input type="email" class="form-control" id="email" name="email" />
                     <span class="help-block">We will send you email of the result.</span>
+                    <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                    <span class="sr-only">(error)</span>
                 </div>
-                <div class="form-group">
+                <div class="form-group has-feedback">
                     <label for="gameid">Game ID</label>
                     <input type="text" class="form-control" id="gameid" name="gameid" maxlength="5" required="required" />
+                    <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                    <span class="sr-only">(error)</span>
                 </div>
-                <div class="form-group">
+                <div class="form-group has-feedback">
                     <label for="player">No of player</label>
                     <input type="number" class="form-control" id="player" name="player" required="required" />
+                    <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                    <span class="sr-only">(error)</span>
                 </div>
                 <div class="form-group">
                     <label for="goal">Goals</label>
                     <div id="goal">
-                        <?php
-                        if (isset($_POST["player"]) && $_POST["player"] != "") :
-                            for ($i = 0; $i < $_POST["player"]; $i++) :
-                                ?>
-                                <input type="text" class="form-control" id="goal<?php echo $i + 1; ?>" name="goal<?php echo $i + 1; ?>" required="required">
-                                <?php
-                            endfor;
-                        endif;
-                        ?>
+
                     </div>
                     <span class="help-block">When you type the no of player, the number of goal input would display.</span>
                 </div>
@@ -79,7 +82,7 @@
         <footer class="navbar-fixed-bottom">
             <p>&copy; Chan Kwan Wing 14011142S</p>
         </footer>  
-        
+
         <div id="ShareDialog" class="modal fade" tabindex="-1" role="dialog">
             <div id="ShareDialogFace" class="modal-dialog">
                 <div class="modal-content">
@@ -92,5 +95,8 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
+        
+        
+        
     </body>
 </html>

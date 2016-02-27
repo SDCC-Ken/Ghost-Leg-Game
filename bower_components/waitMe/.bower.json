@@ -1,0 +1,15 @@
+{
+  "name": "waitMe",
+  "homepage": "https://github.com/vadimsva/waitMe",
+  "version": "20.11.15",
+  "_release": "20.11.15",
+  "_resolution": {
+    "type": "version",
+    "tag": "20.11.15",
+    "commit": "76992300691e6e9646a49817b76797b009a54ff1"
+  },
+  "_source": "https://github.com/vadimsva/waitMe.git",
+  "_target": "^20.11.15",
+  "_originalSource": "https://github.com/vadimsva/waitMe.git",
+  "_direct": true
+}
