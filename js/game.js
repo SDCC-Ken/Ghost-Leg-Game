@@ -4,8 +4,10 @@ var finalize = function (result) {
             $("#main").html("");
             $("#main").kenJqueryBootstrapAlert({type: "danger", close: false, "message": "You cannot change because you have click finish button."});
         } else {
+            $("#gameframe").tooltip({'trigger': 'hover', 'title': 'Click to add line to the game.'});
+            $("#submitButton").tooltip({'trigger': 'hover', 'title': 'Click me to finish the game.'});
             $("#gameframe").attr("src", "gameframe.php?ID=" + id);
-            $("#finishText").kenJqueryBootstrapAlert({type: "info", close: true, "message": "Click the game to add line and click finish to finish your session."});
+            $("#finishText").kenJqueryBootstrapAlert({type: "info", close: true, "message": "Click FINISH button to finish the game"});
             $("#submitButton").click(function () {
                 $('#main').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
                 $.ajax(
@@ -55,12 +57,14 @@ var findseat = function () {
         context.stroke();
         context.beginPath();
         $("#seat" + i).html('<button onClick="setseat(' + i + ')" type="button" class="btn btn-primary expand-right ladda" data-style="expand-right"><span class="ladda-label">Seat ' + i + '</span></button>');
+        //$("#seat" + i).tooltip({'trigger': 'hover', 'title': 'Choose Me','placement':'bottom'});
     }
     for (var i = 0; i < game.player.length; i++) {
         if (game.player[i].seat !== null) {
             $("#seat" + game.player[i].seat).html(game.player[i].name);
         }
     }
+    
 }
 var setseat = function (seat) {
     if (playerName !== null) {
@@ -92,6 +96,9 @@ var setseat = function (seat) {
     }
 };
 var newplayer = function () {
+    $('#name').focus();
+    $('#name').tooltip({'trigger': 'focus', 'title': 'Enter your name'});
+    $('#email').tooltip({'trigger': 'focus', 'title': 'Enter your email and we will send you email for the result.'});
     $("form#EnterNameDialogForm :input").each(function () {
         $(this).change(function () {
             if ($(this).is(":invalid")) {

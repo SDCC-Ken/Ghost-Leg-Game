@@ -1,48 +1,28 @@
+var inputChange = function () {
+    if ($(this).val() === "" && $(this).is(":invalid")) {
+        $(this).siblings(".form-control-feedback").removeClass("glyphicon-ok");
+        $(this).siblings(".form-control-feedback").addClass("glyphicon-remove");
+        $(this).siblings(".sr-only").html("(error)");
+        $(this).parent(".form-group").removeClass("has-success");
+        $(this).parent(".form-group").addClass("has-error");
+    } else {
+        $(this).siblings(".form-control-feedback").removeClass("glyphicon-remove");
+        $(this).siblings(".form-control-feedback").addClass("glyphicon-ok");
+        $(this).siblings(".sr-only").html("(success)");
+        $(this).parent(".form-group").removeClass("has-error");
+        $(this).parent(".form-group").addClass("has-success");
+    }
+}
 $("document").ready(function () {
-    //initialize instance
-    var enjoyhint_instance = new EnjoyHint({});
-    var enjoyhint_script_steps = [
-        {
-            "key #name": "Please Enter your name and Press tab",
-            keyCode: 9,
-            showNext:true,
-        },
-        {
-            "key #email": "Please Enter your email (We will send you the result this email) and Press tab",
-            keyCode: 9,
-            showNext:true,
-        },
-        {
-            "key #gameid": "Please Enter game ID and Press tab",
-            keyCode: 9,
-            showNext:true,
-        },
-        {
-            "key #player": "Please Enter no of player and Press tab",
-            keyCode: 9,
-            showNext:true,
-        },
-        {
-            "key #goal": "Please Enter the goals and Press tab",
-            keyCode: 9,
-            showNext:true,
-        },
-        {
-            "click #createButton": "Click to Create",
-        },
-    ];
-    enjoyhint_instance.set(enjoyhint_script_steps);
-    enjoyhint_instance.run();
+    $('#name').focus();
+    $('#name').tooltip({'trigger': 'focus', 'title': 'Enter your name'});
+    $('#email').tooltip({'trigger': 'focus', 'title': 'Enter your email and we will send you email for the result.'});
+    $('#gameid').tooltip({'trigger': 'focus', 'title': 'You should type a unique game ID for sharing to other'});
+    $('#player').tooltip({'trigger': 'focus', 'title': 'You should enter how many player can join the game and click "TAB" in your keyboard'});
     $("#player").change(function (e) {
         e.preventDefault();
-        var goals = [];
-        $(".goalinput").each(function () {
-            if ($(this).is("input")) {
-                goals.push($(this).val());
-            }
-        });
         $("#goal").html("");
-        for (var i = 0; i < Number($(this).val()); i++) {
+        for (var i = 0; i < Number($("#player").val()); i++) {
             $("#goal").append(
                     '<div class="form-group has-feedback">'
                     + '<input type="text" class="form-control goalinput" id="goal' + i + '" name="goal' + i + '" required="required" />'
@@ -50,41 +30,13 @@ $("document").ready(function () {
                     + '<span class="sr-only">(error)</span>'
                     + '</div>'
                     );
-            $("#goal" + i).val(goals[i]);
-            $("#goal" + i).change(function () {
-                if ($(this).is(":invalid")) {
-                    $(this).siblings(".form-control-feedback").removeClass("glyphicon-ok");
-                    $(this).siblings(".form-control-feedback").addClass("glyphicon-remove");
-                    $(this).siblings(".sr-only").html("(error)");
-                    $(this).parent(".form-group").removeClass("has-success");
-                    $(this).parent(".form-group").addClass("has-error");
-                } else {
-                    $(this).siblings(".form-control-feedback").removeClass("glyphicon-remove");
-                    $(this).siblings(".form-control-feedback").addClass("glyphicon-ok");
-                    $(this).siblings(".sr-only").html("(success)");
-                    $(this).parent(".form-group").removeClass("has-error");
-                    $(this).parent(".form-group").addClass("has-success");
-                }
-            });
+            $('#goal' + i).tooltip({'trigger': 'focus', 'title': 'Enter the goal'});
+            $("#goal" + i).change(inputChange);
         }
-        $(this).trigger('change');
+        $('#goal0').focus();
     });
     $("form#createform :input").each(function () {
-        $(this).change(function () {
-            if ($(this).is(":invalid")) {
-                $(this).siblings(".form-control-feedback").removeClass("glyphicon-ok");
-                $(this).siblings(".form-control-feedback").addClass("glyphicon-remove");
-                $(this).siblings(".sr-only").html("(error)");
-                $(this).parent(".form-group").removeClass("has-success");
-                $(this).parent(".form-group").addClass("has-error");
-            } else {
-                $(this).siblings(".form-control-feedback").removeClass("glyphicon-remove");
-                $(this).siblings(".form-control-feedback").addClass("glyphicon-ok");
-                $(this).siblings(".sr-only").html("(success)");
-                $(this).parent(".form-group").removeClass("has-error");
-                $(this).parent(".form-group").addClass("has-success");
-            }
-        });
+        $(this).change(inputChange);
     });
     $("#createform").submit(function (e) {
         e.preventDefault();
@@ -111,8 +63,8 @@ $("document").ready(function () {
                         var result = JSON.parse(jsonresult);
                         $('#createform').waitMe("hide");
                         if (result.success) {
-                            setLocal("Ghost_Leg_player_name",$("#name").val());
-                            setLocal("Ghost_Leg_player_email",$("#email").val());
+                            setLocal("Ghost_Leg_player_name", $("#name").val());
+                            setLocal("Ghost_Leg_player_email", $("#email").val());
                             $('#ShareDialog').modal({
                                 backdrop: 'static',
                                 keyboard: false
@@ -125,7 +77,6 @@ $("document").ready(function () {
                         }
                     },
                     fail: function (error) {
-                        $('#ChooseSeatDialogFace').waitMe("hide");
                         $("#errortext").kenJqueryBootstrapAlert({type: "danger", close: true, "message": "Error:" + error});
                     },
                 }

@@ -16,6 +16,8 @@ if ($game->line == NULL) {
 } else {
     $line = $game->line;
 }
-$game->line = array_merge($line, array(array("area" => $area, "y" => $y)));
+if(array_search(array("area" => $area, "y" => $y), $line)>=0){
+    $game->line = array_merge($line, array(array("area" => $area, "y" => $y)));
+}
 $ok = $db->updateJSON($id, $game) ? TRUE : FALSE;
 echo $ok ? json_encode(array("success" => $ok)) : json_encode(array("success" => $ok, "message" => "Error!",));
