@@ -81,7 +81,7 @@ $game = $db->readJSON($id) or exit("No Such game");
         <p>Share by Social Network Button:</p>
         <div
             class="fb-share-button" 
-            data-href="" 
+            data-href="http://spd4517ia.kwanwing.tk/game.php?ID=<?php echo $_GET["ID"]; ?>" 
             data-text="Let play ghost leg together!" 
             data-layout="button">
         </div>

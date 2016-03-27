@@ -7,7 +7,7 @@ var finalize = function (result) {
             $("#gameframe").tooltip({'trigger': 'hover', 'title': 'Click to add line to the game.'});
             $("#submitButton").tooltip({'trigger': 'hover', 'title': 'Click me to finish the game.'});
             $("#gameframe").attr("src", "gameframe.php?ID=" + id);
-            $("#finishText").kenJqueryBootstrapAlert({type: "info", close: true, "message": "Click FINISH button to finish the game"});
+            $("#finishText").kenJqueryBootstrapAlert({type: "info", close: false, "message": "Click FINISH button to finish the game"});
             $("#submitButton").click(function () {
                 $('#main').waitMe({effect: 'bounce', text: '', bg: '#FFF', color: '#000', sizeW: '', sizeH: '', source: ''});
                 $.ajax(
@@ -36,7 +36,7 @@ var finalize = function (result) {
             });
         }
     } else {
-        $("#gameframe").attr("src", "result.php?ID=" + id + "&playerseat=" + result.seat);
+        $("#gameframe").attr("src", "resultframe.php?ID=" + id + "&playerseat=" + result.seat);
         $("#submitButton").addClass("hidden");
     }
 
